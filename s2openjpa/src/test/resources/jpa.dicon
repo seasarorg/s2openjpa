@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE components PUBLIC "-//SEASAR//DTD S2Container 2.4//EN"
+	"http://www.seasar.org/dtd/components24.dtd">
+<components>
+	<include path="javaee5.dicon"/>
+	<include path="convention.dicon"/>
+
+<!-- 1. PersistenceUnitProviderの設定 -->
+
+	<!-- for test 単体テスト時はこちらのPersistenceUnitProviderを有効にしてください -->
+	<component class="org.seasar.openjpa.impl.S2OpenJPAPersistenceUnitProvider"/>
+
+<!-- 2. OpenJPA PersistenceProviderの設定 -->	
+	<component class="org.seasar.openjpa.impl.S2OpenJPAPersistenceProvider"/>
+	
+	<!-- SMART deployを利用しない時は以下の３つのComponentはコメントアウトしてください -->
+	<component class="org.seasar.openjpa.impl.AutoDetectorFactoryImpl"/>
+	<component class="org.seasar.framework.jpa.autodetector.MappingFileAutoDetector"/>
+	<component class="org.seasar.framework.jpa.autodetector.PersistenceClassAutoDetector"/>
+		
+<!-- 3. Kuina-Dao用Componentの設定 -->
+	<component class="org.seasar.openjpa.impl.S2OpenJPADialect"/>
+	<component class="org.seasar.openjpa.metadata.OpenJPAEntityDescProvider"/>
+
+<!-- 4. S2Assert(TestCase)用Componentの設定 -->
+<!-- 
+	<component class="org.seasar.toplink.jpa.unit.TopLinkEntityReaderProvider"/>
+ -->
+
+<!-- 5. テスト用DataSourceの設定 -->
+	<!-- for test -->
+	<component name="dataSourceProxy" class="org.seasar.extension.datasource.impl.SingletonDataSourceProxy"/>
+
+<!-- 6. EntityManagerFactory、EntityManagerの設定 -->
+	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">
+		jpa.persistenceUnitManager.getEntityManagerFactory("persistenceUnit")
+	</component>
+
+	<component name="entityManager" class="org.seasar.framework.jpa.impl.TxScopedEntityManagerProxy"/>
+	
+</components>

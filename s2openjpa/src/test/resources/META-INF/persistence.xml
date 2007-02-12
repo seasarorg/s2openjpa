@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+	http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
+	<persistence-unit name="persistenceUnit" transaction-type="JTA">
+		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+
+		<!-- for test -->
+		<jta-data-source>java:comp/env/dataSourceProxy</jta-data-source>
+		<!-- for production -->
+		<!-- 
+		<jta-data-source>java:comp/env/jdbc/dataSource</jta-data-source>
+		 -->
+		 <!-- 
+		<mapping-file>org/seasar/openjpa/entity/CustomerOrm.xml</mapping-file>
+		<class>org.seasar.openjpa.entity.Customer</class>
+		<class>org.seasar.openjpa.entity.Dangeon</class>
+		<class>org.seasar.openjpa.entity.Enemy</class>
+		<class>org.seasar.openjpa.entity.Product</class>
+		  -->
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<!-- for test -->
+			<property name="openjpa.ManagedRuntime" value="org.seasar.openjpa.ee.S2ManagedRuntimeForTest"/>
+			<!-- for production -->
+			<!--
+			<property name="openjpa.ManagedRuntime" value="jndi(TransactionManagerName=jta/TransactionManager)"/>
+			 -->
+			<property name="openjpa.jdbc.DBDictionary" value="org.apache.openjpa.jdbc.sql.H2Dictionary"/>
+			<property name="openjpa.Log" value="DefaultLevel=WARN, Enhance=ERROR"/>
+ 		</properties>
+	</persistence-unit>
+
+</persistence>

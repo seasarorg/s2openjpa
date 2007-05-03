@@ -18,8 +18,6 @@ package org.seasar.openjpa.impl;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
 
-import org.seasar.framework.container.annotation.tiger.DestroyMethod;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.PersistenceUnitManager;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
 
@@ -59,26 +57,28 @@ public class S2OpenJPAPersistenceUnitProvider implements
     }
     
     /**
-     * PersistenceUnitManagerにこのオブジェクトを登録します。
-     */
-    @InitMethod
-    public void register() {
-        persistenceUnitManager.addProvider(this);
-    }
-
-    /**
-     * PersistenceUnitManagerからこのオブジェクトを削除します。
-     */
-    @DestroyMethod
-    public void unregister() {
-        persistenceUnitManager.removeProvider(this);
-    }
-
-    /**
      * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String)
      */
     public EntityManagerFactory createEntityManagerFactory(String unitName) {
         return persistenceProvider.createEntityManagerFactory(unitName, null);
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String, java.lang.String)
+     */
+    public EntityManagerFactory createEntityManagerFactory(String abstractUnitName, String concreteUnitName) {
+        // TODO 自動生成されたメソッド・スタブ
+        return persistenceProvider.createEntityManagerFactory(concreteUnitName, null);
+    }
+
+
+    /* (non-Javadoc)
+     * @see org.seasar.framework.jpa.PersistenceUnitProvider#getEntityManagerFactory()
+     */
+    public EntityManagerFactory getEntityManagerFactory() {
+        // TODO 自動生成されたメソッド・スタブ
+        return null;
     }
 
 }

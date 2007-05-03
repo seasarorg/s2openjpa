@@ -23,7 +23,7 @@
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<!-- for test -->
-			<property name="openjpa.ManagedRuntime" value="org.seasar.openjpa.ee.S2ManagedRuntimeForTest"/>
+			<property name="openjpa.ManagedRuntime" value="org.seasar.openjpa.ee.S2ManagedRuntime"/>
 			<!-- for production -->
 			<!--
 			<property name="openjpa.ManagedRuntime" value="jndi(TransactionManagerName=jta/TransactionManager)"/>

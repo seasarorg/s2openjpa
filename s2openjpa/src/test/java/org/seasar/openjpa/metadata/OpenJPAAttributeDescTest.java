@@ -21,7 +21,6 @@ import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
-import org.seasar.framework.jpa.metadata.EntityDescProvider;
 import org.seasar.openjpa.entity.Customer;
 import org.seasar.openjpa.entity.Product;
 

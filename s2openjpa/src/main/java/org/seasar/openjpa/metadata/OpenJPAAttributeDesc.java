@@ -250,4 +250,20 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
 
     }
 
+    /* (non-Javadoc)
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDesc(java.lang.String)
+     */
+    public AttributeDesc getChildAttributeDesc(String name) {
+        // TODO 自動生成されたメソッド・スタブ
+        return null;
+    }
+
+    /* (non-Javadoc)
+     * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDescs()
+     */
+    public AttributeDesc[] getChildAttributeDescs() {
+        // TODO 自動生成されたメソッド・スタブ
+        return null;
+    }
+
 }

@@ -7,11 +7,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/s2-tiger"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/seasar2"/>
-	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
-	<classpathentry kind="lib" path="lib/commons-pool-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/openjpa-all-0.9.6-incubating.jar" sourcepath="libsrc/openjpa-project-0.9.6-incubating-source.zip"/>
 	<classpathentry kind="lib" path="lib/serp-1.11.0.jar"/>
-	<classpathentry kind="lib" path="lib/h2-1.0.20070130.jar"/>
+	<classpathentry kind="lib" path="lib/openjpa-0.9.7-incubating.jar" sourcepath="libsrc/openjpa-project-0.9.7-incubating-source.zip"/>
+	<classpathentry kind="lib" path="lib/geronimo-jms_1.1_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/geronimo-j2ee-connector_1.5_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

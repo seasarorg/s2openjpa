@@ -63,8 +63,8 @@ public class OpenJPAEntityDescProvider implements EntityDescProvider {
      */
     public EntityDesc createEntityDesc(Class<?> entityClass) {
         ClassMetaData metaData = OpenJPAPersistence.getMetaData(entityManagerFactory, entityClass);
-        OpenJPAEntityManagerFactory factory = OpenJPAEntityManagerFactory.class.cast(entityManagerFactory);
         if (metaData != null) {
+            OpenJPAEntityManagerFactory factory = OpenJPAEntityManagerFactory.class.cast(entityManagerFactory);
             return new OpenJPAEntityDesc(metaData, factory);
         }
         return null;

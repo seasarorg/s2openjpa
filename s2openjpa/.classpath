@@ -15,5 +15,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/h2-1.0.20070304.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

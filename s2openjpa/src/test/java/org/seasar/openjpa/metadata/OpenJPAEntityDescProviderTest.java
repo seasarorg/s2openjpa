@@ -19,7 +19,7 @@ import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 import org.seasar.openjpa.entity.Customer;
-
+import org.seasar.openjpa.entity.Product;
 
 /**
  * @author Hidenoshin Yoshida
@@ -27,23 +27,29 @@ import org.seasar.openjpa.entity.Customer;
  */
 public class OpenJPAEntityDescProviderTest extends S2TestCase {
 
-    private EntityDescProvider entityDescProvider;
-    /* (non-Javadoc)
+    private EntityDescProvider provider;
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
+        super.setUp();
         include("jpa.dicon");
     }
 
     /**
-     * {@link org.seasar.openjpa.metadata.OpenJPAEntityDescProvider#createEntityDesc(java.lang.Class)} のためのテスト・メソッド。
+     * {@link org.seasar.openjpa.metadata.OpenJPAEntityDescProvider#createEntityDesc(java.lang.Class)}
+     * のためのテスト・メソッド。
      */
-    public void testCreateEntityDescTx() {
-        
-        EntityDesc desc = entityDescProvider.createEntityDesc(Customer.class);
-        assertNotNull(desc);
-        desc = entityDescProvider.createEntityDesc(String.class);
+    public void testCreateEntityDesc() {
+        EntityDesc desc = provider.createEntityDesc(Integer.class);
         assertNull(desc);
+        desc = provider.createEntityDesc(Customer.class);
+        assertNotNull(desc);
+        desc = provider.createEntityDesc(Product.class);
+        assertNotNull(desc);
     }
 
 }

@@ -53,10 +53,21 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
     
     private OpenJPAEntityManagerFactory openJPAEntityManagerFactory;
 
+    private OpenJPAEntityDesc embeddedEntityDesc;
+    
     public OpenJPAAttributeDesc(FieldMetaData fieldMetaData,
             OpenJPAEntityManagerFactory openJPAEntityManagerFactory) {
         this.fieldMetaData = fieldMetaData;
         this.openJPAEntityManagerFactory = openJPAEntityManagerFactory;
+        if (fieldMetaData.isEmbeddedPC()) {
+            embeddedEntityDesc = new OpenJPAEntityDesc(
+                fieldMetaData.getEmbeddedMetaData(),
+                openJPAEntityManagerFactory);
+        }
+    }
+    
+    public FieldMetaData getFieldMetaData() {
+        return fieldMetaData;
     }
 
     /*
@@ -192,7 +203,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#isComponent()
      */
     public boolean isComponent() {
-        return fieldMetaData.isEmbedded();
+        return fieldMetaData.isEmbeddedPC();
     }
 
     /*
@@ -254,7 +265,9 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDesc(java.lang.String)
      */
     public AttributeDesc getChildAttributeDesc(String name) {
-        // TODO 自動生成されたメソッド・スタブ
+        if (embeddedEntityDesc != null) {
+            return embeddedEntityDesc.getAttributeDesc(name);
+        }
         return null;
     }
 
@@ -262,7 +275,9 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDescs()
      */
     public AttributeDesc[] getChildAttributeDescs() {
-        // TODO 自動生成されたメソッド・スタブ
+        if (embeddedEntityDesc != null) {
+            return embeddedEntityDesc.getAttributeDescs();
+        }
         return null;
     }
 

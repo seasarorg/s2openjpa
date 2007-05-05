@@ -27,6 +27,7 @@ import java.sql.Types;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.TemporalType;
 
@@ -34,8 +35,10 @@ import org.apache.openjpa.conf.OpenJPAConfiguration;
 import org.apache.openjpa.jdbc.conf.JDBCConfiguration;
 import org.apache.openjpa.jdbc.meta.FieldMapping;
 import org.apache.openjpa.jdbc.meta.FieldStrategy;
+import org.apache.openjpa.jdbc.meta.ValueMappingInfo;
 import org.apache.openjpa.jdbc.meta.strats.ContainerFieldStrategy;
 import org.apache.openjpa.jdbc.meta.strats.RelationFieldStrategy;
+import org.apache.openjpa.jdbc.schema.Column;
 import org.apache.openjpa.meta.FieldMetaData;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerFactory;
 import org.seasar.framework.exception.IllegalAccessRuntimeException;
@@ -51,6 +54,8 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
 
     private FieldMetaData fieldMetaData;
     
+    private ValueMappingInfo mappingInfo;
+    
     private OpenJPAEntityManagerFactory openJPAEntityManagerFactory;
 
     private OpenJPAEntityDesc embeddedEntityDesc;
@@ -63,6 +68,9 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
             embeddedEntityDesc = new OpenJPAEntityDesc(
                 fieldMetaData.getEmbeddedMetaData(),
                 openJPAEntityManagerFactory);
+        }
+        if (fieldMetaData instanceof FieldMapping) {
+            mappingInfo = FieldMapping.class.cast(fieldMetaData).getValueInfo();
         }
     }
     
@@ -111,6 +119,14 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getSqlType()
      */
     public int getSqlType() {
+        if (mappingInfo != null) {
+            @SuppressWarnings("unchecked")
+            List cols = mappingInfo.getColumns();
+            if (cols != null && cols.size() == 1) {
+                Column col = (Column) cols.get(0);
+                return col.getType();
+            }
+        }
         OpenJPAConfiguration oConf = openJPAEntityManagerFactory.getConfiguration();
         if (oConf instanceof JDBCConfiguration) {
             JDBCConfiguration conf = JDBCConfiguration.class.cast(oConf);
@@ -154,7 +170,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
             boolean access = field.isAccessible();
             try {
                 field.setAccessible(true);
-                field.get(entity);
+                return field.get(entity);
             } catch (IllegalAccessException e) {
                 throw new IllegalAccessRuntimeException(field.getClass(), e);
             } finally {
@@ -163,7 +179,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         } else if (member instanceof Method) {
             Method method = Method.class.cast(member);
             try {
-                method.invoke(entity, (Object) null);
+                return method.invoke(entity, (Object) null);
             } catch (IllegalAccessException e) {
                 throw new IllegalAccessRuntimeException(method.getClass(), e);
             } catch (InvocationTargetException e) {

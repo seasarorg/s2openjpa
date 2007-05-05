@@ -7,13 +7,6 @@
 	<persistence-unit name="persistenceUnit" transaction-type="JTA">
 		<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
 		<jta-data-source>jdbc/dataSource</jta-data-source>
-		 <!-- 
-		<mapping-file>org/seasar/openjpa/entity/CustomerOrm.xml</mapping-file>
-		<class>org.seasar.openjpa.entity.Customer</class>
-		<class>org.seasar.openjpa.entity.Dangeon</class>
-		<class>org.seasar.openjpa.entity.Enemy</class>
-		<class>org.seasar.openjpa.entity.Product</class>
-		  -->
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
 		<properties>
 			<property name="openjpa.ManagedRuntime" value="org.seasar.openjpa.ee.S2ManagedRuntime"/>

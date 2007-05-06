@@ -19,43 +19,42 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.spi.PersistenceProvider;
 
 import org.seasar.framework.jpa.PersistenceUnitManager;
-import org.seasar.framework.jpa.PersistenceUnitProvider;
-
+import org.seasar.framework.jpa.impl.AbstractPersistenceUnitProvider;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
-public class S2OpenJPAPersistenceUnitProvider implements
-        PersistenceUnitProvider {
+public class S2OpenJPAPersistenceUnitProvider extends
+        AbstractPersistenceUnitProvider {
 
     /**
      * PersistenceUnitManagerオブジェクト
      */
     protected PersistenceUnitManager persistenceUnitManager;
-    
+
     /**
      * PersistenceProviderオブジェクト
      */
     protected PersistenceProvider persistenceProvider;
-    
-    
+
     /**
-     * @param persistenceProvider 設定する persistenceProvider
+     * @param persistenceProvider
+     *            設定する persistenceProvider
      */
     public void setPersistenceProvider(PersistenceProvider persistenceProvider) {
         this.persistenceProvider = persistenceProvider;
     }
 
-    
     /**
-     * @param persistenceUnitManager 設定する persistenceUnitManager
+     * @param persistenceUnitManager
+     *            設定する persistenceUnitManager
      */
     public void setPersistenceUnitManager(
             PersistenceUnitManager persistenceUnitManager) {
         this.persistenceUnitManager = persistenceUnitManager;
     }
-    
+
     /**
      * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String)
      */
@@ -63,22 +62,17 @@ public class S2OpenJPAPersistenceUnitProvider implements
         return persistenceProvider.createEntityManagerFactory(unitName, null);
     }
 
-
-    /* (non-Javadoc)
-     * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String, java.lang.String)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.seasar.framework.jpa.PersistenceUnitProvider#createEntityManagerFactory(java.lang.String,
+     *      java.lang.String)
      */
-    public EntityManagerFactory createEntityManagerFactory(String abstractUnitName, String concreteUnitName) {
+    public EntityManagerFactory createEntityManagerFactory(
+            String abstractUnitName, String concreteUnitName) {
         // TODO 自動生成されたメソッド・スタブ
-        return persistenceProvider.createEntityManagerFactory(concreteUnitName, null);
-    }
-
-
-    /* (non-Javadoc)
-     * @see org.seasar.framework.jpa.PersistenceUnitProvider#getEntityManagerFactory()
-     */
-    public EntityManagerFactory getEntityManagerFactory() {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
+        return persistenceProvider.createEntityManagerFactory(concreteUnitName,
+                null);
     }
 
 }

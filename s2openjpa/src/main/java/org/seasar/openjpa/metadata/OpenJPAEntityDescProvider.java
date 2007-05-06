@@ -20,51 +20,28 @@ import javax.persistence.EntityManagerFactory;
 import org.apache.openjpa.meta.ClassMetaData;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerFactory;
 import org.apache.openjpa.persistence.OpenJPAPersistence;
-import org.seasar.framework.container.annotation.tiger.DestroyMethod;
-import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.metadata.EntityDesc;
-import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
-
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class OpenJPAEntityDescProvider implements EntityDescProvider {
-    
-    private EntityManagerFactory entityManagerFactory;
 
-    /**
-     * @param entityManagerFactory 設定する entityManagerFactory
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.seasar.framework.jpa.metadata.EntityDescProvider#createEntityDesc(javax.persistence.EntityManagerFactory,
+     *      java.lang.Class)
      */
-    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
-    }
-
-    /**
-     * EntityDescFactoryにこのオブジェクトを追加します。
-     */
-    @InitMethod
-    public void register() {
-        EntityDescFactory.addProvider(this);
-    }
-
-    /**
-     * EntityDescFactoryからこのオブジェクトを削除します。
-     */
-    @DestroyMethod
-    public void unregister() {
-        EntityDescFactory.removeProvider(this);
-    }
-
-    /* (non-Javadoc)
-     * @see org.seasar.framework.jpa.metadata.EntityDescProvider#createEntityDesc(java.lang.Class)
-     */
-    public EntityDesc createEntityDesc(Class<?> entityClass) {
-        ClassMetaData metaData = OpenJPAPersistence.getMetaData(entityManagerFactory, entityClass);
+    public EntityDesc createEntityDesc(EntityManagerFactory emf,
+            Class<?> entityClass) {
+        ClassMetaData metaData = OpenJPAPersistence.getMetaData(emf,
+                entityClass);
         if (metaData != null) {
-            OpenJPAEntityManagerFactory factory = OpenJPAEntityManagerFactory.class.cast(entityManagerFactory);
+            OpenJPAEntityManagerFactory factory = OpenJPAEntityManagerFactory.class
+                    .cast(emf);
             return new OpenJPAEntityDesc(metaData, factory);
         }
         return null;

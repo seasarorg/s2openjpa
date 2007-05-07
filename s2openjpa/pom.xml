@@ -169,6 +169,12 @@
 						<link>
 							http://s2container.seasar.org/ja/s2-framework/apidocs/
 						</link>
+						<link>
+							http://s2container.seasar.org/ja/s2-extension/apidocs/
+						</link>
+						<link>
+							http://s2container.seasar.org/ja/s2-tiger/apidocs/
+						</link>
 					</links>
 				</configuration>
 			</plugin>
@@ -176,11 +182,9 @@
 	</build>
 	<repositories>
 		<repository>
-			<id>people.apache.org</id>
-			<url>
-				http://people.apache.org/www/people.apache.org/repo/m2-incubating-repository/
-			</url>
-		</repository>
+            <id>apache-snapshots</id>
+            <url>http://people.apache.org/repo/m2-incubating-repository</url>
+        </repository>
 		<repository>
 			<id>maven.seasar.org</id>
 			<name>The Seasar Project Maven2 Repository</name>
@@ -199,6 +203,28 @@
 			<groupId>org.apache.openjpa</groupId>
 			<artifactId>openjpa-all</artifactId>
 			<version>0.9.7-incubating</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ant</groupId>
+					<artifactId>ant</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.geronimo.specs</groupId>
+					<artifactId>geronimo-jta_1.0.1B_spec</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.seasar.container</groupId>
@@ -260,10 +286,16 @@
 		<repository>
 			<uniqueVersion>false</uniqueVersion>
 			<id>maven.seasar.org</id>
-			<name>The Seasar Project Maven2 Repository</name>
-			<url>
-				scp://maven.seasar.org/home/groups/maven/maven/maven2
-			</url>
+			<name>The Seasar Foundation Maven2 Repository</name>
+			<url>dav:https://www.seasar.org/maven/maven2</url>
 		</repository>
+		<snapshotRepository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>maven.seasar.org</id>
+			<name>
+				The Seasar Foundation Maven2 Snapshot Repository
+			</name>
+			<url>dav:https://www.seasar.org/maven/maven2-snapshot</url>
+		</snapshotRepository>
 	</distributionManagement>
 </project>

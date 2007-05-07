@@ -6,6 +6,7 @@
 
 	<component name="persistenceUnitProvider" class="org.seasar.framework.jpa.impl.ContainerPersistenceUnitProvider">
 		<property name="unitName">"persistenceUnit"</property>
+		<property name="providerClassName">"org.apache.openjpa.persistence.PersistenceProviderImpl"</property>
 	</component>
 
 	<component name="entityManagerFactory" class="javax.persistence.EntityManagerFactory">

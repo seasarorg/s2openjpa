@@ -27,10 +27,9 @@ import org.seasar.framework.container.annotation.tiger.InitMethod;
 import org.seasar.framework.jpa.Dialect;
 import org.seasar.framework.jpa.DialectManager;
 
-
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2OpenJPADialect implements Dialect {
 
@@ -56,17 +55,16 @@ public class S2OpenJPADialect implements Dialect {
         dialectManager.removeDialect(OpenJPAEntityManager.class);
     }
 
-    /**
-     * @see org.seasar.framework.jpa.Dialect#getConnection(javax.persistence.EntityManager)
-     */
     public Connection getConnection(EntityManager em) {
         Object delegate = em.getDelegate();
-        if (delegate instanceof OpenJPAEntityManager) {
-            OpenJPAEntityManager ojpaEm = OpenJPAEntityManager.class.cast(delegate);
-            return Connection.class.cast(ojpaEm.getConnection());
-        }
-        return null;
+        OpenJPAEntityManager ojpaEm = OpenJPAEntityManager.class.cast(delegate);
+        return Connection.class.cast(ojpaEm.getConnection());
     }
 
+    public void detach(EntityManager em, Object managedEntity) {
+        Object delegate = em.getDelegate();
+        OpenJPAEntityManager ojpaEm = OpenJPAEntityManager.class.cast(delegate);
+        ojpaEm.release(managedEntity);
+    }
 
 }

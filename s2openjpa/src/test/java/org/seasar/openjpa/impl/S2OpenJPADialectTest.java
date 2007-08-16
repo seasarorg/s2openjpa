@@ -24,18 +24,21 @@ import javax.persistence.EntityManager;
 
 import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.Dialect;
-
+import org.seasar.openjpa.entity.Customer;
 
 /**
  * @author Hidenoshin Yoshida
- *
+ * 
  */
 public class S2OpenJPADialectTest extends S2TestCase {
 
     private Dialect dialect;
-    
+
     private EntityManager entityManager;
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
+     * 
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {
@@ -43,8 +46,10 @@ public class S2OpenJPADialectTest extends S2TestCase {
     }
 
     /**
-     * {@link org.seasar.openjpa.impl.S2OpenJPADialect#getConnection(javax.persistence.EntityManager)} のためのテスト・メソッド。
-     * @throws SQLException 
+     * {@link org.seasar.openjpa.impl.S2OpenJPADialect#getConnection(javax.persistence.EntityManager)}
+     * のためのテスト・メソッド。
+     * 
+     * @throws SQLException
      */
     public void testGetConnectionTx() throws SQLException {
         Connection con = dialect.getConnection(entityManager);
@@ -61,15 +66,24 @@ public class S2OpenJPADialectTest extends S2TestCase {
                     }
                 } finally {
                     rs.close();
-                }                
+                }
             } finally {
                 st.close();
             }
         } finally {
             con.close();
         }
-        
-        System.out.println(entityManager.createNamedQuery("countCustomer").getSingleResult());
+
+        System.out.println(entityManager.createNamedQuery("countCustomer")
+                .getSingleResult());
+    }
+
+    public void testDetachTx() throws Exception {
+        Customer cust1 = entityManager.find(Customer.class, 1);
+        dialect.detach(entityManager, cust1);
+        assertFalse(entityManager.contains(cust1));
+        Customer cust2 = entityManager.find(Customer.class, 1);
+        assertNotSame(cust1, cust2);
     }
 
 }

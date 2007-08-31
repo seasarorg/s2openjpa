@@ -18,8 +18,8 @@ package org.seasar.openjpa.metadata;
 import javax.persistence.EntityManagerFactory;
 
 import org.apache.openjpa.meta.ClassMetaData;
-import org.apache.openjpa.persistence.OpenJPAEntityManagerFactory;
-import org.apache.openjpa.persistence.OpenJPAPersistence;
+import org.apache.openjpa.persistence.JPAFacadeHelper;
+import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 
@@ -37,10 +37,10 @@ public class OpenJPAEntityDescProvider implements EntityDescProvider {
      */
     public EntityDesc createEntityDesc(EntityManagerFactory emf,
             Class<?> entityClass) {
-        ClassMetaData metaData = OpenJPAPersistence.getMetaData(emf,
+        ClassMetaData metaData = JPAFacadeHelper.getMetaData(emf,
                 entityClass);
         if (metaData != null) {
-            OpenJPAEntityManagerFactory factory = OpenJPAEntityManagerFactory.class
+            OpenJPAEntityManagerFactorySPI factory = OpenJPAEntityManagerFactorySPI.class
                     .cast(emf);
             return new OpenJPAEntityDesc(metaData, factory);
         }

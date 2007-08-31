@@ -40,7 +40,7 @@ import org.apache.openjpa.jdbc.meta.strats.ContainerFieldStrategy;
 import org.apache.openjpa.jdbc.meta.strats.RelationFieldStrategy;
 import org.apache.openjpa.jdbc.schema.Column;
 import org.apache.openjpa.meta.FieldMetaData;
-import org.apache.openjpa.persistence.OpenJPAEntityManagerFactory;
+import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
 import org.seasar.framework.exception.IllegalAccessRuntimeException;
 import org.seasar.framework.exception.InvocationTargetRuntimeException;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
@@ -56,12 +56,12 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
     
     private ValueMappingInfo mappingInfo;
     
-    private OpenJPAEntityManagerFactory openJPAEntityManagerFactory;
+    private OpenJPAEntityManagerFactorySPI openJPAEntityManagerFactory;
 
     private OpenJPAEntityDesc embeddedEntityDesc;
     
     public OpenJPAAttributeDesc(FieldMetaData fieldMetaData,
-            OpenJPAEntityManagerFactory openJPAEntityManagerFactory) {
+            OpenJPAEntityManagerFactorySPI openJPAEntityManagerFactory) {
         this.fieldMetaData = fieldMetaData;
         this.openJPAEntityManagerFactory = openJPAEntityManagerFactory;
         if (fieldMetaData.isEmbeddedPC()) {

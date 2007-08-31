@@ -17,7 +17,7 @@ package org.seasar.openjpa.ee;
 
 import javax.transaction.TransactionManager;
 
-import org.apache.openjpa.ee.ManagedRuntime;
+import org.apache.openjpa.ee.AbstractManagedRuntime;
 import org.seasar.extension.jta.SingletonTransactionManagerProxy;
 
 
@@ -25,7 +25,7 @@ import org.seasar.extension.jta.SingletonTransactionManagerProxy;
  * @author Hidenoshin Yoshida
  *
  */
-public class S2ManagedRuntime implements ManagedRuntime {
+public class S2ManagedRuntime extends AbstractManagedRuntime {
 
     /* (non-Javadoc)
      * @see org.apache.openjpa.ee.ManagedRuntime#getTransactionManager()

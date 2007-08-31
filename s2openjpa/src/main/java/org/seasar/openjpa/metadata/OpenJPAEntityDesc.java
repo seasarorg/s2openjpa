@@ -22,7 +22,7 @@ import java.util.Map;
 
 import org.apache.openjpa.meta.ClassMetaData;
 import org.apache.openjpa.meta.FieldMetaData;
-import org.apache.openjpa.persistence.OpenJPAEntityManagerFactory;
+import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 
@@ -44,7 +44,7 @@ public class OpenJPAEntityDesc implements EntityDesc {
     private Map<String, OpenJPAAttributeDesc> attributeDescMap;
     
     public OpenJPAEntityDesc(ClassMetaData classMetaData,
-            OpenJPAEntityManagerFactory factory) {
+            OpenJPAEntityManagerFactorySPI factory) {
         this.classMetaData = classMetaData;
         List<OpenJPAAttributeDesc> list = new ArrayList<OpenJPAAttributeDesc>();
         List<String> attributeNameList = new ArrayList<String>();

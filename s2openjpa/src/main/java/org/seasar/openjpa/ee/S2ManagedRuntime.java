@@ -15,6 +15,8 @@
  */
 package org.seasar.openjpa.ee;
 
+import javax.transaction.Status;
+import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 
 import org.apache.openjpa.ee.AbstractManagedRuntime;
@@ -45,7 +47,11 @@ public class S2ManagedRuntime extends AbstractManagedRuntime {
      * @see org.apache.openjpa.ee.ManagedRuntime#setRollbackOnly(java.lang.Throwable)
      */
     public void setRollbackOnly(Throwable cause) throws Exception {
-        getTransactionManager().getTransaction().setRollbackOnly();
+//        getTransactionManager().getTransaction().setRollbackOnly();
+        Transaction tx = getTransactionManager().getTransaction();
+        if (tx.getStatus() != Status.STATUS_MARKED_ROLLBACK) {
+            tx.setRollbackOnly();
+        }
     }
 
 }

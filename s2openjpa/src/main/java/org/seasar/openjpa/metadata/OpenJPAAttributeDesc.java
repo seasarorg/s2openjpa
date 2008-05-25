@@ -64,7 +64,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
             OpenJPAEntityManagerFactorySPI openJPAEntityManagerFactory) {
         this.fieldMetaData = fieldMetaData;
         this.openJPAEntityManagerFactory = openJPAEntityManagerFactory;
-        if (fieldMetaData.isEmbeddedPC()) {
+        if (fieldMetaData.getEmbeddedMetaData() != null) {
             embeddedEntityDesc = new OpenJPAEntityDesc(
                 fieldMetaData.getEmbeddedMetaData(),
                 openJPAEntityManagerFactory);
@@ -219,7 +219,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#isComponent()
      */
     public boolean isComponent() {
-        return fieldMetaData.isEmbeddedPC();
+        return fieldMetaData.getEmbeddedMetaData() != null;
     }
 
     /*

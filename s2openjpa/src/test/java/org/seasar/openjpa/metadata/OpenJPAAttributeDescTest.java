@@ -29,6 +29,7 @@ import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.openjpa.entity.Customer;
 import org.seasar.openjpa.entity.Dangeon;
+import org.seasar.openjpa.entity.EmbeddedSample;
 import org.seasar.openjpa.entity.Enemy;
 import org.seasar.openjpa.entity.Product;
 import org.seasar.openjpa.entity.Sex;
@@ -231,6 +232,14 @@ public class OpenJPAAttributeDescTest extends S2TestCase {
         assertFalse(desc.isComponent());
         desc = eDesc.getAttributeDesc("dangeon");
         assertTrue(desc.isComponent());
+    }
+    
+    public void testIsComponentId() {
+        EntityDesc eDesc = EntityDescFactory.getEntityDesc(EmbeddedSample.class);
+        AttributeDesc desc = eDesc.getAttributeDesc("id");
+        assertTrue(desc.isComponent());
+        desc = eDesc.getAttributeDesc("name");
+        assertFalse(desc.isComponent());
     }
 
     /**

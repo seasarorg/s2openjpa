@@ -280,7 +280,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
     /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDesc(java.lang.String)
      */
-    public AttributeDesc getChildAttributeDesc(String name) {
+    public OpenJPAAttributeDesc getChildAttributeDesc(String name) {
         if (embeddedEntityDesc != null) {
             return embeddedEntityDesc.getAttributeDesc(name);
         }
@@ -290,7 +290,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
     /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getChildAttributeDescs()
      */
-    public AttributeDesc[] getChildAttributeDescs() {
+    public OpenJPAAttributeDesc[] getChildAttributeDescs() {
         if (embeddedEntityDesc != null) {
             return embeddedEntityDesc.getAttributeDescs();
         }

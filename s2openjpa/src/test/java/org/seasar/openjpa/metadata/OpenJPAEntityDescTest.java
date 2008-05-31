@@ -22,6 +22,8 @@ import org.seasar.extension.unit.S2TestCase;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
 import org.seasar.openjpa.entity.Customer;
+import org.seasar.openjpa.entity.JoindSample;
+import org.seasar.openjpa.entity.JoindSampleChild;
 import org.seasar.openjpa.entity.Product;
 
 
@@ -127,6 +129,14 @@ public class OpenJPAEntityDescTest extends S2TestCase {
         assertEquals(desc.getIdAttributeDesc(), desc.getAttributeDesc("id"));
         desc = EntityDescFactory.getEntityDesc(Product.class);
         assertEquals(desc.getIdAttributeDesc(), desc.getAttributeDesc("id"));
+    }
+    
+    public void testGetTableNames() {
+        OpenJPAEntityDesc desc = OpenJPAEntityDesc.class.cast(EntityDescFactory.getEntityDesc(JoindSampleChild.class));
+        assertNotNull(desc);
+        assertEquals(2, desc.getTableNames().length);
+        assertEquals(JoindSample.class.getSimpleName(), desc.getTableNames()[0]);
+        assertEquals("JOIND_SAMPLE_CHILD", desc.getTableNames()[1]);
     }
 
 }

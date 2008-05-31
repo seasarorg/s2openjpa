@@ -17,9 +17,13 @@ package org.seasar.openjpa.metadata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.openjpa.jdbc.meta.FieldMapping;
+import org.apache.openjpa.jdbc.schema.Column;
 import org.apache.openjpa.meta.ClassMetaData;
 import org.apache.openjpa.meta.FieldMetaData;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
@@ -41,6 +45,9 @@ public class OpenJPAEntityDesc implements EntityDesc {
     
     private String[] attributeNames;
     
+    /** テーブル名の配列 */
+    protected final String[] tableNames;
+    
     private Map<String, OpenJPAAttributeDesc> attributeDescMap;
     
     public OpenJPAEntityDesc(ClassMetaData classMetaData,
@@ -48,6 +55,7 @@ public class OpenJPAEntityDesc implements EntityDesc {
         this.classMetaData = classMetaData;
         List<OpenJPAAttributeDesc> list = new ArrayList<OpenJPAAttributeDesc>();
         List<String> attributeNameList = new ArrayList<String>();
+        Set<String> tableNameSet = new LinkedHashSet<String>();
         attributeDescMap = new HashMap<String, OpenJPAAttributeDesc>();
         for (FieldMetaData data : classMetaData.getFields()) {
             OpenJPAAttributeDesc desc = new OpenJPAAttributeDesc(data, factory);
@@ -57,22 +65,38 @@ public class OpenJPAEntityDesc implements EntityDesc {
             list.add(desc);
             attributeNameList.add(data.getName());
             attributeDescMap.put(data.getName(), desc);
+            setTable(tableNameSet, data);
+            if (desc.getChildAttributeDescs() != null) {
+                for (OpenJPAAttributeDesc childAttr : desc.getChildAttributeDescs()) {
+                    setTable(tableNameSet, childAttr.getFieldMetaData());
+                }
+            }
         }
         attributeDescs = list.toArray(new OpenJPAAttributeDesc[list.size()]);
         attributeNames = attributeNameList.toArray(new String[attributeNameList.size()]);
+        tableNames = tableNameSet.toArray(new String[tableNameSet.size()]);
+    }
+
+    private void setTable(Set<String> tableNameSet, FieldMetaData data) {
+        if (data instanceof FieldMapping) {
+            FieldMapping mapping = FieldMapping.class.cast(data);
+            for (Column c : mapping.getColumns()) {
+                tableNameSet.add(c.getTableName());
+            }
+        }
     }
 
     /* (non-Javadoc)
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getAttributeDesc(java.lang.String)
      */
-    public AttributeDesc getAttributeDesc(String attributeName) {
+    public OpenJPAAttributeDesc getAttributeDesc(String attributeName) {
         return attributeDescMap.get(attributeName);
     }
 
     /* (non-Javadoc)
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getAttributeDescs()
      */
-    public AttributeDesc[] getAttributeDescs() {
+    public OpenJPAAttributeDesc[] getAttributeDescs() {
         return attributeDescs;
     }
 
@@ -103,6 +127,15 @@ public class OpenJPAEntityDesc implements EntityDesc {
     public AttributeDesc getIdAttributeDesc() {
         
         return idAttributeDesc;
+    }
+
+    
+    public String[] getTableNames() {
+        return tableNames;
+    }
+    
+    public ClassMetaData getClassMetaData() {
+        return classMetaData;
     }
 
 }

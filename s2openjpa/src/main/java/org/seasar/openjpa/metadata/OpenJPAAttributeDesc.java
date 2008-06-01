@@ -70,7 +70,8 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
                 openJPAEntityManagerFactory);
         }
         if (fieldMetaData instanceof FieldMapping) {
-            mappingInfo = FieldMapping.class.cast(fieldMetaData).getValueInfo();
+            FieldMapping mapping = FieldMapping.class.cast(fieldMetaData);
+            mappingInfo = mapping.getValueInfo();
         }
     }
     
@@ -294,7 +295,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         if (embeddedEntityDesc != null) {
             return embeddedEntityDesc.getAttributeDescs();
         }
-        return null;
+        return new OpenJPAAttributeDesc[]{};
     }
-
+    
 }

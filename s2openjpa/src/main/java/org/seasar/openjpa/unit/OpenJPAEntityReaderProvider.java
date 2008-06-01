@@ -16,11 +16,12 @@
 package org.seasar.openjpa.unit;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
-import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.jpa.unit.EntityReaderProvider;
+import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.openjpa.metadata.OpenJPAEntityDesc;
 
 
@@ -47,9 +48,30 @@ public class OpenJPAEntityReaderProvider implements EntityReaderProvider {
     /* (non-Javadoc)
      * @see org.seasar.framework.jpa.unit.EntityReaderProvider#createEntityReader(java.util.Collection)
      */
-    public EntityReader createEntityReader(Collection<?> entities) {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
+    public OpenJPAEntityCollectionReader createEntityReader(Collection<?> entities) {
+        if (entities == null) {
+            return null;
+        }
+
+        final Collection<Object> newEntities = flatten(entities);
+        if (newEntities.isEmpty()) {
+            return null;
+        }
+
+        final Map<Class<?>, OpenJPAEntityDesc> entityDescs = CollectionsUtil
+                .newHashMap();
+        for (final Object entity : newEntities) {
+            final Class<?> entityClass = entity.getClass();
+            if (entityDescs.containsKey(entityClass)) {
+                continue;
+            }
+            final OpenJPAEntityDesc entityDesc = getEntityDesc(entityClass);
+            if (entityDescs == null) {
+                return null;
+            }
+            entityDescs.put(entityClass, entityDesc);
+        }
+        return new OpenJPAEntityCollectionReader(newEntities, entityDescs);
     }
     
     /**
@@ -67,5 +89,28 @@ public class OpenJPAEntityReaderProvider implements EntityReaderProvider {
         }
         return OpenJPAEntityDesc.class.cast(entityDesc);
     }
+    
+    /**
+     * entitiesの中にObject配列が含まれていた場合、配列の要素をCollectionに追加して、新たなCollectionを生成します。
+     * 
+     * @param entities
+     *            対象Collection
+     * @return 新規作成したCollection
+     */
+    protected Collection<Object> flatten(final Collection<?> entities) {
+        Collection<Object> newEntities = CollectionsUtil.newArrayList(entities
+                .size());
+        for (final Object element : entities) {
+            if (element instanceof Object[]) {
+                for (final Object nested : Object[].class.cast(element)) {
+                    newEntities.add(nested);
+                }
+            } else {
+                newEntities.add(element);
+            }
+        }
+        return newEntities;
+    }
+
 
 }

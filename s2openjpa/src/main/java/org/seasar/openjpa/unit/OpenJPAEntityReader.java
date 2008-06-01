@@ -15,14 +15,19 @@
  */
 package org.seasar.openjpa.unit;
 
+import java.util.Map;
+
 import org.apache.openjpa.jdbc.meta.FieldMapping;
 import org.apache.openjpa.jdbc.schema.Column;
 import org.apache.openjpa.meta.FieldMetaData;
+import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
 import org.seasar.extension.dataset.impl.DataSetImpl;
+import org.seasar.extension.dataset.states.RowStates;
 import org.seasar.extension.dataset.types.ColumnTypes;
 import org.seasar.framework.jpa.unit.EntityReader;
+import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.openjpa.metadata.OpenJPAAttributeDesc;
 import org.seasar.openjpa.metadata.OpenJPAEntityDesc;
 
@@ -37,6 +42,9 @@ public class OpenJPAEntityReader implements EntityReader {
     
     /** データセット */
     protected final DataSet dataSet = new DataSetImpl();
+    
+    protected OpenJPAEntityReader() {
+    }
 
     /**
      * @param entityDesc
@@ -44,13 +52,14 @@ public class OpenJPAEntityReader implements EntityReader {
     public OpenJPAEntityReader(Object entity, OpenJPAEntityDesc entityDesc) {
         this.entityDesc = entityDesc;
         setupColumns();
+        setupRow(entity);
     }
     
     /**
      * カラムを設定します。
      */
     protected void setupColumns() {
-        for (String tableName : entityDesc.getTableNames()) {
+        for (String tableName : getEntityDesc().getTableNames()) {
             if (!dataSet.hasTable(tableName)) {
                 dataSet.addTable(tableName);
             }
@@ -64,12 +73,10 @@ public class OpenJPAEntityReader implements EntityReader {
      */
     protected void setupAttributeColumns() {
         
-        for (OpenJPAAttributeDesc attribute : entityDesc.getAttributeDescs()) {
+        for (OpenJPAAttributeDesc attribute : getEntityDesc().getAttributeDescs()) {
             setColumn(attribute);
-            if (attribute.getChildAttributeDescs() != null) {
-                for (OpenJPAAttributeDesc child : attribute.getChildAttributeDescs()) {
-                    setColumn(child);
-                }
+            for (OpenJPAAttributeDesc child : attribute.getChildAttributeDescs()) {
+                setColumn(child);
             }
         }
     }
@@ -90,21 +97,70 @@ public class OpenJPAEntityReader implements EntityReader {
     }
 
     protected void setupDiscriminatorColumn() {
-//        if (!entityDesc.hasDiscriminatorColumn()) {
-//            return;
-//        }
-//        InheritancePolicy inheritancePolicy = getEntityDesc().getInheritancePolicy();
-//        DatabaseField field = inheritancePolicy.getClassIndicatorField();
-//        DataTable table = dataSet.getTable(field.getTableName());
-//        
-//        ServerSession serverSession = getEntityDesc().getServerSession();
-//        DatabasePlatform platform = serverSession.getPlatform();
-//        
-//        int sqlType = platform.getJDBCType(field);
-//        String columnName = field.getName();
-//        if (!table.hasColumn(columnName)) {
-//            table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
-//        }
+        if (!getEntityDesc().hasDiscriminatorColumn()) {
+            return;
+        }
+        final String tableName = getEntityDesc().getPrimaryTableName();
+        final String columnName = getEntityDesc().getDiscriminatorColumnName();
+        final DataTable table = dataSet.getTable(tableName);
+        if (!table.hasColumn(columnName)) {
+            final int sqlType = getEntityDesc().getDiscriminatorSqlType();
+            table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
+        }
+    }
+    
+    /**
+     * 行を設定します。
+     * 
+     * @param entity
+     *            エンティティ
+     */
+    protected void setupRow(final Object entity) {
+        Map<String, DataRow> rowMap = CollectionsUtil.newHashMap();
+        for (OpenJPAAttributeDesc attribute : getEntityDesc().getAttributeDescs()) {
+            if (attribute.isComponent()) {
+                for (OpenJPAAttributeDesc childDesc : attribute.getChildAttributeDescs()) {
+                    setRow(entity, rowMap, childDesc);
+                }
+            } else {
+                setRow(entity, rowMap, attribute);
+            }
+        }
+        if (getEntityDesc().hasDiscriminatorColumn()) {
+            DataTable table = dataSet.getTable(getEntityDesc().getPrimaryTableName());
+            DataRow row = rowMap.get(table.getTableName());
+            if (row == null) {
+                row = table.addRow();
+                rowMap.put(table.getTableName(), row);
+            }
+            row.setValue(getEntityDesc().getDiscriminatorColumnName(), getEntityDesc().getDiscriminatorValue());
+        }
+        for (String key : rowMap.keySet()) {
+            rowMap.get(key).setState(RowStates.UNCHANGED);
+        }
+    }
+
+    protected void setRow(final Object entity, Map<String, DataRow> rowMap,
+            OpenJPAAttributeDesc attribute) {
+        FieldMetaData meta = attribute.getFieldMetaData();
+        if (meta instanceof FieldMapping) {
+            FieldMapping mapping = FieldMapping.class.cast(meta);
+            for (Column c : mapping.getColumns()) {
+                DataTable table = dataSet.getTable(c.getTableName());
+                DataRow row = rowMap.get(table.getTableName());
+                if (row == null) {
+                    row = table.addRow();
+                    rowMap.put(table.getTableName(), row);
+                }
+                Object value = attribute.getValue(entity);
+                row.setValue(c.getName(), value);
+                
+            }
+        }
+    }
+    
+    protected OpenJPAEntityDesc getEntityDesc() {
+        return entityDesc;
     }
 
 

@@ -15,6 +15,7 @@
  */
 package org.seasar.openjpa.metadata;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.openjpa.jdbc.meta.ClassMapping;
+import org.apache.openjpa.jdbc.meta.Discriminator;
 import org.apache.openjpa.jdbc.meta.FieldMapping;
 import org.apache.openjpa.jdbc.schema.Column;
 import org.apache.openjpa.meta.ClassMetaData;
@@ -50,6 +53,18 @@ public class OpenJPAEntityDesc implements EntityDesc {
     
     private Map<String, OpenJPAAttributeDesc> attributeDescMap;
     
+    /** 主テーブル名 */
+    protected final String primaryTableName;
+
+    /** 識別カラム */
+    protected final String discriminatorColumnName;
+    
+    /** 識別値 */
+    protected final String discriminatorValue;
+
+    /** 識別カラムの{@link Types SQL型}が表す値 */
+    protected final int discriminatorSqlType;
+
     public OpenJPAEntityDesc(ClassMetaData classMetaData,
             OpenJPAEntityManagerFactorySPI factory) {
         this.classMetaData = classMetaData;
@@ -66,15 +81,50 @@ public class OpenJPAEntityDesc implements EntityDesc {
             attributeNameList.add(data.getName());
             attributeDescMap.put(data.getName(), desc);
             setTable(tableNameSet, data);
-            if (desc.getChildAttributeDescs() != null) {
-                for (OpenJPAAttributeDesc childAttr : desc.getChildAttributeDescs()) {
-                    setTable(tableNameSet, childAttr.getFieldMetaData());
-                }
+            for (OpenJPAAttributeDesc childAttr : desc.getChildAttributeDescs()) {
+                setTable(tableNameSet, childAttr.getFieldMetaData());
             }
         }
         attributeDescs = list.toArray(new OpenJPAAttributeDesc[list.size()]);
         attributeNames = attributeNameList.toArray(new String[attributeNameList.size()]);
         tableNames = tableNameSet.toArray(new String[tableNameSet.size()]);
+        if (classMetaData instanceof ClassMapping) {
+            ClassMapping mapping = ClassMapping.class.cast(classMetaData);
+            String columnName = null;
+            String columnValue = null;
+            Integer sqlType = null;
+            Discriminator discriminator = mapping.getDiscriminator();
+            if (discriminator != null) {
+                Object obj = discriminator.getValue();
+                if (obj != null) {
+                    columnValue = String.valueOf(obj);
+                }
+                if (discriminator.getColumns().length >= 1) {
+                    Column c = discriminator.getColumns()[0];
+                    columnName = c.getName();
+                    sqlType = c.getType();
+                } else {
+                    ClassMapping superMap = mapping.getPCSuperclassMapping();
+                    if (superMap != null) {
+                        Discriminator superDis = superMap.getDiscriminator();
+                        if (superDis.getColumns().length >= 1) {
+                            Column c = superDis.getColumns()[0];
+                            columnName = c.getName();
+                            sqlType = c.getType();
+                        }
+                    }
+                }
+            }
+            primaryTableName = mapping.getTable().getName();
+            discriminatorColumnName = columnName;
+            discriminatorSqlType = sqlType != null ? sqlType : Types.OTHER;
+            discriminatorValue = columnValue;
+        } else {
+            primaryTableName = null;
+            discriminatorColumnName = null;
+            discriminatorSqlType = Types.OTHER;
+            discriminatorValue = null;
+        }
     }
 
     private void setTable(Set<String> tableNameSet, FieldMetaData data) {
@@ -137,5 +187,51 @@ public class OpenJPAEntityDesc implements EntityDesc {
     public ClassMetaData getClassMetaData() {
         return classMetaData;
     }
+
+    /**
+     * 主テーブルの名前を返します。
+     * 
+     * @return 主テーブルの名前
+     */
+    public String getPrimaryTableName() {
+        return primaryTableName;
+    }
+    
+    /**
+     * 識別カラム名を持っている場合<code>true</code>を返します。
+     * 
+     * @return 識別カラム名を持っている場合<code>true</code>、そうでない場合<code>false</code>
+     */
+    public boolean hasDiscriminatorColumn() {
+        return discriminatorColumnName != null;
+    }
+
+    /**
+     * 識別カラム名を返します。
+     * 
+     * @return 識別カラム名
+     */
+    public String getDiscriminatorColumnName() {
+        return discriminatorColumnName;
+    }
+
+    /**
+     * 識別値を返します。
+     * 
+     * @return 識別値
+     */
+    public String getDiscriminatorValue() {
+        return discriminatorValue;
+    }
+
+    /**
+     * 識別カラムの{@link Types SQL型}が表す値を返します。
+     * 
+     * @return 識別カラムの{@link Types SQL型}が表す値
+     */
+    public int getDiscriminatorSqlType() {
+        return discriminatorSqlType;
+    }
+
 
 }

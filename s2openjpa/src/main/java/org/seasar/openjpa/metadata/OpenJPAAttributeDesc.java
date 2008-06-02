@@ -165,6 +165,9 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getValue(java.lang.Object)
      */
     public Object getValue(Object entity) {
+        if (entity == null) {
+            return null;
+        }
         Member member = fieldMetaData.getBackingMember();
         if (member instanceof Field) {
             Field field = Field.class.cast(member);

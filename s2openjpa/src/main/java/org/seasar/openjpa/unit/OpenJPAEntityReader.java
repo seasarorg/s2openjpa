@@ -20,11 +20,14 @@ import java.util.Map;
 import org.apache.openjpa.jdbc.meta.FieldMapping;
 import org.apache.openjpa.jdbc.schema.Column;
 import org.apache.openjpa.meta.FieldMetaData;
+import org.seasar.extension.dataset.ColumnType;
+import org.seasar.extension.dataset.DataColumn;
 import org.seasar.extension.dataset.DataRow;
 import org.seasar.extension.dataset.DataSet;
 import org.seasar.extension.dataset.DataTable;
 import org.seasar.extension.dataset.impl.DataSetImpl;
 import org.seasar.extension.dataset.states.RowStates;
+import org.seasar.extension.dataset.types.BigDecimalType;
 import org.seasar.extension.dataset.types.ColumnTypes;
 import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.util.tiger.CollectionsUtil;
@@ -120,7 +123,7 @@ public class OpenJPAEntityReader implements EntityReader {
         for (OpenJPAAttributeDesc attribute : getEntityDesc().getAttributeDescs()) {
             if (attribute.isComponent()) {
                 for (OpenJPAAttributeDesc childDesc : attribute.getChildAttributeDescs()) {
-                    setRow(entity, rowMap, childDesc);
+                    setRow(attribute.getValue(entity), rowMap, childDesc);
                 }
             } else {
                 setRow(entity, rowMap, attribute);
@@ -153,6 +156,19 @@ public class OpenJPAEntityReader implements EntityReader {
                     rowMap.put(table.getTableName(), row);
                 }
                 Object value = attribute.getValue(entity);
+                if (value != null) {
+//                    if (attribute.isComponent()) {
+//                        value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
+//                    }
+                    if (value instanceof Enum) {
+                        DataColumn column = table.getColumn(c.getName());
+                        ColumnType type = column.getColumnType();
+                        if (type instanceof BigDecimalType) {
+                            value = Enum.class.cast(value).ordinal();
+                        }
+                    }
+                }
+
                 row.setValue(c.getName(), value);
                 
             }

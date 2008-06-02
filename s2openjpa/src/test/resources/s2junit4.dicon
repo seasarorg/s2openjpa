@@ -9,9 +9,6 @@
 
 	<component class="org.seasar.framework.unit.impl.ConfigFileIncluderImpl">
 		<initMethod name="addConfigFile">
-			<arg>"javaee5.dicon"</arg>
-		</initMethod>
-		<initMethod name="addConfigFile">
 			<arg>"jpa.dicon"</arg>
 		</initMethod>
 		<initMethod name="addConfigFile">

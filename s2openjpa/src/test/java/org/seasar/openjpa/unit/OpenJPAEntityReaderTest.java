@@ -15,10 +15,18 @@
  */
 package org.seasar.openjpa.unit;
 
-import org.junit.Before;
-import org.junit.Test;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.runner.RunWith;
 import org.seasar.framework.unit.Seasar2;
+import org.seasar.framework.unit.TestContext;
+import org.seasar.openjpa.entity.Customer;
+import org.seasar.openjpa.entity.Dangeon;
+import org.seasar.openjpa.entity.Enemy;
+import org.seasar.openjpa.entity.Sex;
 
 import static org.seasar.framework.unit.S2Assert.*;
 
@@ -29,76 +37,75 @@ import static org.seasar.framework.unit.S2Assert.*;
  */
 @RunWith(Seasar2.class)
 public class OpenJPAEntityReaderTest {
+    
+    private TestContext ctx;
 
-    /**
-     * @throws java.lang.Exception
-     */
-    @Before
-    public void setUp() throws Exception {
+
+    public void testCustomer() throws ParseException {
+        Customer c = new Customer();
+        c.setId(1);
+        c.setName("小泉");
+        c.setAddress("東京");
+        c.setPhone("03-3333-3333");
+        c.setAge(35);
+        c.setBirthday(new SimpleDateFormat("yyyy/MM/dd").parse("1900/01/02"));
+        c.setSex(Sex.WOMAN);
+        c.setVersion(0);
+        
+        assertEntityEquals(ctx.getExpected(), c);
     }
 
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#setupColumns()} のためのテスト・メソッド。
-     */
-    @Test
-    public void testSetupColumns() {
-//        fail("まだ実装されていません。");
+    public void testCustomer2() throws ParseException {
+        List<Customer> list = new ArrayList<Customer>();
+        Customer c = new Customer();
+        c.setId(1);
+        c.setName("小泉");
+        c.setAddress("神奈川");
+        c.setPhone("03-3333-3333");
+        c.setAge(35);
+        c.setBirthday(new SimpleDateFormat("yyyy/MM/dd").parse("1900/01/02"));
+        c.setSex(Sex.WOMAN);
+        c.setVersion(0);
+        list.add(c);
+        c = new Customer();
+        c.setId(2);
+        c.setName("安倍");
+        c.setAddress("山口");
+        c.setPhone("02-1234-5678");
+        c.setAge(30);
+        c.setBirthday(new SimpleDateFormat("yyyy/MM/dd").parse("1982/03/21"));
+        c.setSex(Sex.MAN);
+        c.setVersion(1);
+        list.add(c);
+        c = new Customer();
+        c.setId(3);
+        c.setName("前川");
+        c.setAddress("東京");
+        c.setPhone("01-2345-9876");
+        c.setAge(35);
+        c.setBirthday(new SimpleDateFormat("yyyy/MM/dd").parse("1964/05/01"));
+        c.setSex(Sex.WOMAN);
+        c.setVersion(3);
+        list.add(c);
+        
+        assertEntityEquals(ctx.getExpected(), list);
     }
-
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#setupAttributeColumns()} のためのテスト・メソッド。
-     */
-    @Test
-    public void testSetupAttributeColumns() {
-//        fail("まだ実装されていません。");
+    
+    public void testEnemy() throws ParseException {
+        
+        Enemy e = new Enemy();
+        e.setId(1);
+        e.setName("小泉");
+        e.setAddress("神奈川");
+        e.setPhone("03-3333-3333");
+        e.setAge(35);
+        e.setBirthday(new SimpleDateFormat("yyyy/MM/dd").parse("1900/01/02"));
+        e.setSex(Sex.WOMAN);
+        e.setVersion(0);
+        Dangeon d = new Dangeon();
+        d.setDangeonName("ロンダルキア");
+        d.setDangeonLevel(10);
+        e.setDangeon(d);
+        assertEntityEquals(ctx.getExpected(), e);
     }
-
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#setColumn(org.seasar.openjpa.metadata.OpenJPAAttributeDesc)} のためのテスト・メソッド。
-     */
-    @Test
-    public void testSetColumn() {
-//        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#setupDiscriminatorColumn()} のためのテスト・メソッド。
-     */
-    @Test
-    public void testSetupDiscriminatorColumn() {
-//        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#setupRow(java.lang.Object)} のためのテスト・メソッド。
-     */
-    @Test
-    public void testSetupRow() {
-//        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#setRow(java.lang.Object, java.util.Map, org.seasar.openjpa.metadata.OpenJPAAttributeDesc)} のためのテスト・メソッド。
-     */
-    @Test
-    public void testSetRow() {
-//        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#getEntityDesc()} のためのテスト・メソッド。
-     */
-    @Test
-    public void testGetEntityDesc() {
-//        fail("まだ実装されていません。");
-    }
-
-    /**
-     * {@link org.seasar.openjpa.unit.OpenJPAEntityReader#read()} のためのテスト・メソッド。
-     */
-    @Test
-    public void testRead() {
-//        fail("まだ実装されていません。");
-    }
-
 }

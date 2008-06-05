@@ -17,25 +17,21 @@ package org.seasar.openjpa.impl;
 
 import javax.persistence.EntityManagerFactory;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.PersistenceUnitProvider;
+import org.seasar.framework.unit.Seasar2;
 
+import static org.seasar.framework.unit.S2Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class S2OpenJPAPersistenceUnitProviderTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class S2OpenJPAPersistenceUnitProviderTest {
 
     private PersistenceUnitProvider persistenceUnitProvider;
     
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        include("jpa.dicon");
-    }
-
     /**
      * {@link org.seasar.openjpa.impl.S2OpenJPAPersistenceUnitProvider#createEntityManagerFactory(java.lang.String)} のためのテスト・メソッド。
      */

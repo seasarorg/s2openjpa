@@ -20,28 +20,23 @@ import java.sql.SQLException;
 
 import javax.persistence.EntityManager;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.Dialect;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.openjpa.entity.Customer;
+
+import static org.seasar.framework.unit.S2Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  * 
  */
-public class S2OpenJPADialectTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class S2OpenJPADialectTest {
 
     private Dialect dialect;
 
     private EntityManager entityManager;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        include("jpa.dicon");
-    }
 
     /**
      * {@link org.seasar.openjpa.impl.S2OpenJPADialect#getConnection(javax.persistence.EntityManager)}
@@ -49,7 +44,7 @@ public class S2OpenJPADialectTest extends S2TestCase {
      * 
      * @throws SQLException
      */
-    public void testGetConnectionTx() throws SQLException {
+    public void testGetConnection() throws SQLException {
         Connection con = dialect.getConnection(entityManager);
         try {
             assertNotNull(con);
@@ -58,7 +53,7 @@ public class S2OpenJPADialectTest extends S2TestCase {
         }
     }
 
-    public void testDetachTx() throws Exception {
+    public void testDetach() throws Exception {
         Customer cust1 = entityManager.find(Customer.class, 1);
         dialect.detach(entityManager, cust1);
         assertFalse(entityManager.contains(cust1));

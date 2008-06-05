@@ -18,26 +18,24 @@ package org.seasar.openjpa.metadata;
 import java.util.Arrays;
 import java.util.List;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.openjpa.entity.Customer;
 import org.seasar.openjpa.entity.JoindSample;
 import org.seasar.openjpa.entity.JoindSampleChild;
 import org.seasar.openjpa.entity.Product;
 
+import static org.seasar.framework.unit.S2Assert.*;
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class OpenJPAEntityDescTest extends S2TestCase {
+@RunWith(Seasar2.class)
+public class OpenJPAEntityDescTest {
     
-    public void setUp() throws Exception {
-        super.setUp();
-        include("jpa.dicon");
-    }
-
     /**
      * {@link org.seasar.openjpa.metadata.OpenJPAEntityDesc#getAttributeDesc(java.lang.String)} のためのテスト・メソッド。
      */

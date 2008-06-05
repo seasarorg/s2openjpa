@@ -22,10 +22,11 @@ import java.util.Set;
 
 import javax.persistence.TemporalType;
 
-import org.seasar.extension.unit.S2TestCase;
+import org.junit.runner.RunWith;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescFactory;
+import org.seasar.framework.unit.Seasar2;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.openjpa.entity.Customer;
 import org.seasar.openjpa.entity.Dangeon;
@@ -34,19 +35,14 @@ import org.seasar.openjpa.entity.Enemy;
 import org.seasar.openjpa.entity.Product;
 import org.seasar.openjpa.entity.Sex;
 
+import static org.seasar.framework.unit.S2Assert.*;
+
 /**
  * @author Hidenoshin Yoshida
  *
  */
-public class OpenJPAAttributeDescTest extends S2TestCase {
-
-    /* (non-Javadoc)
-     * @see junit.framework.TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-        include("jpa.dicon");
-    }
+@RunWith(Seasar2.class)
+public class OpenJPAAttributeDescTest {
 
     /**
      * {@link org.seasar.openjpa.metadata.OpenJPAAttributeDesc#getElementType()} のためのテスト・メソッド。

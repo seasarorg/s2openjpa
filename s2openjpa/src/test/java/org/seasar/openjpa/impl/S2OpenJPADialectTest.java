@@ -16,9 +16,7 @@
 package org.seasar.openjpa.impl;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javax.persistence.EntityManager;
 
@@ -55,27 +53,9 @@ public class S2OpenJPADialectTest extends S2TestCase {
         Connection con = dialect.getConnection(entityManager);
         try {
             assertNotNull(con);
-            Statement st = con.createStatement();
-            try {
-                ResultSet rs = st.executeQuery("SELECT * FROM CUSTOMER");
-                try {
-                    while (rs.next()) {
-                        System.out.print(rs.getObject(1));
-                        System.out.print("," + rs.getObject(2));
-                        System.out.println("," + rs.getObject(3));
-                    }
-                } finally {
-                    rs.close();
-                }
-            } finally {
-                st.close();
-            }
         } finally {
             con.close();
         }
-
-        System.out.println(entityManager.createNamedQuery("countCustomer")
-                .getSingleResult());
     }
 
     public void testDetachTx() throws Exception {

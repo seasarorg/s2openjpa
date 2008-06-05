@@ -21,11 +21,8 @@
 	-->
 
 	<!-- for H2 -->
-	<component name="xaDataSource"
-		class="org.seasar.extension.dbcp.impl.XADataSourceImpl">
-		<property name="driverClassName">
-			"org.h2.Driver"
-		</property>
+	<component name="nonJtaDataSource"
+		class="org.h2.jdbcx.JdbcDataSource">
 		<property name="URL">
 			"jdbc:h2:"
 			+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.openjpa.impl.S2OpenJPAPersistenceUnitProviderTest@class).getCanonicalPath()
@@ -167,20 +164,6 @@
 		class="org.seasar.extension.dbcp.impl.DataSourceImpl"
 	/>
 	
-	<component name="nonJtaDataSource"
-		class="org.seasar.openjpa.datasource.impl.NonJtaDataSourceImpl">
-		<property name="driverClassName">
-			"org.h2.Driver"
-		</property>
-		<property name="URL">
-			"jdbc:h2:"
-			+ @org.seasar.framework.util.ResourceUtil@getBuildDir(@org.seasar.openjpa.impl.S2OpenJPAPersistenceUnitProviderTest@class).getCanonicalPath()
-			+ "/data/demo;DB_CLOSE_ON_EXIT=FALSE"
-		</property>
-		<property name="user">"sa"</property>
-		<property name="password">""</property>
-	</component>
-
 	<!-- from JNDI -->
 	<!--
 	<component name="dataSource"

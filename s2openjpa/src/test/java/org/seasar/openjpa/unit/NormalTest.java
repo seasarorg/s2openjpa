@@ -37,6 +37,12 @@ public class NormalTest {
     
     private EntityManager em;
     
+    public void testSingle() {
+        
+        Normal entity = em.find(Normal.class, 1);
+        assertEntityEquals(ctx.getExpected(), entity);
+    }
+    
     public void testCollection() {
         @SuppressWarnings("unchecked")
         List<Normal> list = em.createNamedQuery("NormalTest.testCollection")

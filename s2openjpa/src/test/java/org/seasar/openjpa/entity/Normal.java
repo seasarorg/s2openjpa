@@ -42,7 +42,7 @@ public class Normal implements Serializable {
     private static final long serialVersionUID = 897724740502061595L;
 
     @Id
-    @GeneratedValue(generator = "NormalGenerater", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "NormalGenerator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "NormalGenerator", sequenceName = "SEQ_NOMAL", allocationSize = 1)
     private Integer id;
     

@@ -12,7 +12,7 @@
 		<properties>
 			<property name="openjpa.ManagedRuntime" value="org.seasar.openjpa.ee.S2ManagedRuntime"/>
 			<property name="openjpa.jdbc.DBDictionary" value="org.apache.openjpa.jdbc.sql.H2Dictionary"/>
-			<property name="openjpa.Log" value="DefaultLevel=WARN, Enhance=ERROR"/>
+			<property name="openjpa.Log" value="DefaultLevel=WARN, Enhance=ERROR, SQL=TRACE"/>
  		</properties>
 	</persistence-unit>
 </persistence>

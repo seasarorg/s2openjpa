@@ -41,6 +41,23 @@ public class EmbeddedSampleId implements Serializable {
     private Date pk2;
 
     
+    /**
+     * 
+     */
+    public EmbeddedSampleId() {
+    }
+
+
+    /**
+     * @param pk1
+     * @param pk2
+     */
+    public EmbeddedSampleId(Integer pk1, Date pk2) {
+        this.pk1 = pk1;
+        this.pk2 = pk2;
+    }
+
+
     public Integer getPk1() {
         return pk1;
     }

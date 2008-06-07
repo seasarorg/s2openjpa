@@ -19,6 +19,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
@@ -36,6 +37,7 @@ public class JoindSample implements Serializable {
      */
     private static final long serialVersionUID = 5715513133078684914L;
 
+    @Id
     private Integer id;
     
     @Column(name = "D_NAME")

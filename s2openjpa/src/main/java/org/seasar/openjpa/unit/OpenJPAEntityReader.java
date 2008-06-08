@@ -17,8 +17,10 @@ package org.seasar.openjpa.unit;
 
 import java.util.Map;
 
+import org.apache.openjpa.jdbc.meta.ClassMapping;
 import org.apache.openjpa.jdbc.meta.FieldMapping;
 import org.apache.openjpa.jdbc.schema.Column;
+import org.apache.openjpa.jdbc.schema.Table;
 import org.apache.openjpa.meta.FieldMetaData;
 import org.seasar.extension.dataset.ColumnType;
 import org.seasar.extension.dataset.DataColumn;
@@ -33,6 +35,7 @@ import org.seasar.framework.jpa.unit.EntityReader;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.openjpa.metadata.OpenJPAAttributeDesc;
 import org.seasar.openjpa.metadata.OpenJPAEntityDesc;
+import org.seasar.openjpa.util.OpenJpaUtil;
 
 
 /**
@@ -62,13 +65,12 @@ public class OpenJPAEntityReader implements EntityReader {
      * カラムを設定します。
      */
     protected void setupColumns() {
-        for (String tableName : getEntityDesc().getTableNames()) {
-            if (!dataSet.hasTable(tableName)) {
-                dataSet.addTable(tableName);
+        for (Table table : getEntityDesc().getTables()) {
+            if (!dataSet.hasTable(table.getName())) {
+                dataSet.addTable(table.getName());
             }
         }
         setupAttributeColumns();
-        setupDiscriminatorColumn();
     }
 
     /**
@@ -76,42 +78,18 @@ public class OpenJPAEntityReader implements EntityReader {
      */
     protected void setupAttributeColumns() {
         
-        for (OpenJPAAttributeDesc attribute : getEntityDesc().getAttributeDescs()) {
-            setColumn(attribute);
-            for (OpenJPAAttributeDesc child : attribute.getChildAttributeDescs()) {
-                setColumn(child);
-            }
-        }
-    }
-
-    protected void setColumn(OpenJPAAttributeDesc attribute) {
-        FieldMetaData field = attribute.getFieldMetaData();
-        if (field instanceof FieldMapping) {
-            FieldMapping mapping = FieldMapping.class.cast(field);
-            for (Column c : mapping.getColumns()) {
-                DataTable table = dataSet.getTable(c.getTableName());
+        for (Table table : getEntityDesc().getTables()) {
+            DataTable dataTable = dataSet.getTable(table.getName());
+            for (Column c : table.getColumns()) {
                 int sqlType = c.getType();
                 String columnName = c.getName();
-                if (!table.hasColumn(columnName)) {
-                    table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
+                if (!dataTable.hasColumn(columnName)) {
+                    dataTable.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
                 }
             }
         }
     }
 
-    protected void setupDiscriminatorColumn() {
-        if (!getEntityDesc().hasDiscriminatorColumn()) {
-            return;
-        }
-        final String tableName = getEntityDesc().getPrimaryTableName();
-        final String columnName = getEntityDesc().getDiscriminatorColumnName();
-        final DataTable table = dataSet.getTable(tableName);
-        if (!table.hasColumn(columnName)) {
-            final int sqlType = getEntityDesc().getDiscriminatorSqlType();
-            table.addColumn(columnName, ColumnTypes.getColumnType(sqlType));
-        }
-    }
-    
     /**
      * 行を設定します。
      * 
@@ -129,17 +107,44 @@ public class OpenJPAEntityReader implements EntityReader {
                 setRow(entity, rowMap, attribute);
             }
         }
+        DataTable table = dataSet.getTable(getEntityDesc().getPrimaryTableName());
+        DataRow row = rowMap.get(table.getTableName());
+        if (row == null) {
+            row = table.addRow();
+            rowMap.put(table.getTableName(), row);
+        }
         if (getEntityDesc().hasDiscriminatorColumn()) {
-            DataTable table = dataSet.getTable(getEntityDesc().getPrimaryTableName());
-            DataRow row = rowMap.get(table.getTableName());
-            if (row == null) {
-                row = table.addRow();
-                rowMap.put(table.getTableName(), row);
-            }
             row.setValue(getEntityDesc().getDiscriminatorColumnName(), getEntityDesc().getDiscriminatorValue());
+        }
+        ClassMapping cm = (ClassMapping) getEntityDesc().getClassMetaData();
+        for (FieldMapping fMapping : cm.getPrimaryKeyFieldMappings()) {
+            if (fMapping.getEmbeddedMetaData() != null) {
+                ClassMapping embCm = fMapping.getEmbeddedMapping();
+                Object embedded = OpenJpaUtil.getValue(fMapping, entity);
+                for (FieldMapping fm2 : embCm.getFieldMappings()) {                    
+                    setIdRow(embedded, table, row, fm2);
+                }
+            } else {
+                setIdRow(entity, table, row, fMapping);
+            }
         }
         for (String key : rowMap.keySet()) {
             rowMap.get(key).setState(RowStates.UNCHANGED);
+        }
+    }
+
+    /**
+     * @param entity
+     * @param table
+     * @param row
+     * @param fMapping
+     */
+    protected void setIdRow(final Object entity, DataTable table, DataRow row,
+            FieldMapping fMapping) {
+        for (Column c : fMapping.getColumns()) {
+            Object value = OpenJpaUtil.getValue(fMapping, entity);
+            value = convertValue(c, table, value);
+            row.setValue(c.getName(), value);
         }
     }
 
@@ -156,23 +161,34 @@ public class OpenJPAEntityReader implements EntityReader {
                     rowMap.put(table.getTableName(), row);
                 }
                 Object value = attribute.getValue(entity);
-                if (value != null) {
-//                    if (attribute.isComponent()) {
-//                        value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
-//                    }
-                    if (value instanceof Enum) {
-                        DataColumn column = table.getColumn(c.getName());
-                        ColumnType type = column.getColumnType();
-                        if (type instanceof BigDecimalType) {
-                            value = Enum.class.cast(value).ordinal();
-                        }
-                    }
-                }
+                value = convertValue(c, table, value);
 
                 row.setValue(c.getName(), value);
                 
             }
         }
+    }
+
+    /**
+     * @param c
+     * @param table
+     * @param value
+     * @return
+     */
+    protected Object convertValue(Column c, DataTable table, Object value) {
+        if (value != null) {
+//                    if (attribute.isComponent()) {
+//                        value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
+//                    }
+            if (value instanceof Enum) {
+                DataColumn column = table.getColumn(c.getName());
+                ColumnType type = column.getColumnType();
+                if (type instanceof BigDecimalType) {
+                    value = Enum.class.cast(value).ordinal();
+                }
+            }
+        }
+        return value;
     }
     
     protected OpenJPAEntityDesc getEntityDesc() {

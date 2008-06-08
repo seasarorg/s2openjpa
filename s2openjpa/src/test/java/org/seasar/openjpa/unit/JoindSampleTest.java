@@ -15,11 +15,53 @@
  */
 package org.seasar.openjpa.unit;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import org.junit.runner.RunWith;
+import org.seasar.framework.unit.Seasar2;
+import org.seasar.framework.unit.TestContext;
+import org.seasar.openjpa.entity.JoindSample;
+import org.seasar.openjpa.entity.JoindSampleChild;
+import org.seasar.openjpa.entity.JoindSampleChild2;
+
+import static org.seasar.framework.unit.S2Assert.*;
+
 
 /**
  * @author Hidenoshin Yoshida
  *
  */
+@RunWith(Seasar2.class)
 public class JoindSampleTest {
+    
+    private EntityManager em;
+    
+    private TestContext ctx;
+    
+    public void testJoindSample() {
+        JoindSample js = em.find(JoindSample.class, 1);
+        assertEntityEquals(ctx.getExpected(), js);
+        
+    }
+    
+    public void testJoindSampleChild() {
+        JoindSampleChild jsc = em.find(JoindSampleChild.class, 2);
+        assertEntityEquals(ctx.getExpected(), jsc);
+    }
+    
+    public void testJoindSampleChild2() {
+        JoindSampleChild2 jsc2 = em.find(JoindSampleChild2.class, 3);
+        assertEntityEquals(ctx.getExpected(), jsc2);
+        
+    }
+    
+    public void testCollection() {
+        @SuppressWarnings("unchecked")
+        List<JoindSample> list = em.createNamedQuery("JoindSampleTest.testCollection")
+            .getResultList();
+        assertEntityEquals(ctx.getExpected(), list);
+    }
 
 }

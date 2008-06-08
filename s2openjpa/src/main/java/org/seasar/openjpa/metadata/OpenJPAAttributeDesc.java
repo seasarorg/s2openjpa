@@ -45,6 +45,7 @@ import org.seasar.framework.exception.IllegalAccessRuntimeException;
 import org.seasar.framework.exception.InvocationTargetRuntimeException;
 import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.util.TemporalTypeUtil;
+import org.seasar.openjpa.util.OpenJpaUtil;
 
 /**
  * @author Hidenoshin Yoshida
@@ -165,32 +166,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getValue(java.lang.Object)
      */
     public Object getValue(Object entity) {
-        if (entity == null) {
-            return null;
-        }
-        Member member = fieldMetaData.getBackingMember();
-        if (member instanceof Field) {
-            Field field = Field.class.cast(member);
-            boolean access = field.isAccessible();
-            try {
-                field.setAccessible(true);
-                return field.get(entity);
-            } catch (IllegalAccessException e) {
-                throw new IllegalAccessRuntimeException(field.getClass(), e);
-            } finally {
-                field.setAccessible(access);
-            }
-        } else if (member instanceof Method) {
-            Method method = Method.class.cast(member);
-            try {
-                return method.invoke(entity, (Object) null);
-            } catch (IllegalAccessException e) {
-                throw new IllegalAccessRuntimeException(method.getClass(), e);
-            } catch (InvocationTargetException e) {
-                throw new InvocationTargetRuntimeException(method.getClass(), e);
-            }
-        }
-        return null;
+        return OpenJpaUtil.getValue(fieldMetaData, entity);
     }
 
     /*

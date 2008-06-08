@@ -132,9 +132,9 @@ public class OpenJPAEntityDescTest {
     public void testGetTableNames() {
         OpenJPAEntityDesc desc = OpenJPAEntityDesc.class.cast(EntityDescFactory.getEntityDesc(JoindSampleChild.class));
         assertNotNull(desc);
-        assertEquals(2, desc.getTableNames().length);
-        assertEquals(JoindSample.class.getSimpleName(), desc.getTableNames()[0]);
-        assertEquals("JOIND_SAMPLE_CHILD", desc.getTableNames()[1]);
+        assertEquals(2, desc.getTables().length);
+        assertEquals(JoindSample.class.getSimpleName(), desc.getTables()[0].getName());
+        assertEquals("JOIND_SAMPLE_CHILD", desc.getTables()[1].getName());
     }
 
 }

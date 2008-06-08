@@ -27,6 +27,7 @@ import org.apache.openjpa.jdbc.meta.ClassMapping;
 import org.apache.openjpa.jdbc.meta.Discriminator;
 import org.apache.openjpa.jdbc.meta.FieldMapping;
 import org.apache.openjpa.jdbc.schema.Column;
+import org.apache.openjpa.jdbc.schema.Table;
 import org.apache.openjpa.meta.ClassMetaData;
 import org.apache.openjpa.meta.FieldMetaData;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
@@ -48,8 +49,8 @@ public class OpenJPAEntityDesc implements EntityDesc {
     
     private String[] attributeNames;
     
-    /** テーブル名の配列 */
-    protected final String[] tableNames;
+    /** テーブルの配列 */
+    protected final Table[] tables;
     
     private Map<String, OpenJPAAttributeDesc> attributeDescMap;
     
@@ -70,7 +71,7 @@ public class OpenJPAEntityDesc implements EntityDesc {
         this.classMetaData = classMetaData;
         List<OpenJPAAttributeDesc> list = new ArrayList<OpenJPAAttributeDesc>();
         List<String> attributeNameList = new ArrayList<String>();
-        Set<String> tableNameSet = new LinkedHashSet<String>();
+        Set<Table> tableSet = new LinkedHashSet<Table>();
         attributeDescMap = new HashMap<String, OpenJPAAttributeDesc>();
         for (FieldMetaData data : classMetaData.getFields()) {
             OpenJPAAttributeDesc desc = new OpenJPAAttributeDesc(data, factory);
@@ -80,14 +81,14 @@ public class OpenJPAEntityDesc implements EntityDesc {
             list.add(desc);
             attributeNameList.add(data.getName());
             attributeDescMap.put(data.getName(), desc);
-            setTable(tableNameSet, data);
+            setTable(tableSet, data);
             for (OpenJPAAttributeDesc childAttr : desc.getChildAttributeDescs()) {
-                setTable(tableNameSet, childAttr.getFieldMetaData());
+                setTable(tableSet, childAttr.getFieldMetaData());
             }
         }
         attributeDescs = list.toArray(new OpenJPAAttributeDesc[list.size()]);
         attributeNames = attributeNameList.toArray(new String[attributeNameList.size()]);
-        tableNames = tableNameSet.toArray(new String[tableNameSet.size()]);
+        tables = tableSet.toArray(new Table[tableSet.size()]);
         if (classMetaData instanceof ClassMapping) {
             ClassMapping mapping = ClassMapping.class.cast(classMetaData);
             String columnName = null;
@@ -127,11 +128,11 @@ public class OpenJPAEntityDesc implements EntityDesc {
         }
     }
 
-    private void setTable(Set<String> tableNameSet, FieldMetaData data) {
+    private void setTable(Set<Table> tableSet, FieldMetaData data) {
         if (data instanceof FieldMapping) {
             FieldMapping mapping = FieldMapping.class.cast(data);
             for (Column c : mapping.getColumns()) {
-                tableNameSet.add(c.getTableName());
+                tableSet.add(c.getTable());
             }
         }
     }
@@ -180,8 +181,8 @@ public class OpenJPAEntityDesc implements EntityDesc {
     }
 
     
-    public String[] getTableNames() {
-        return tableNames;
+    public Table[] getTables() {
+        return tables;
     }
     
     public ClassMetaData getClassMetaData() {

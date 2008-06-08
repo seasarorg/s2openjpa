@@ -16,7 +16,6 @@
 package org.seasar.openjpa.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 
@@ -25,7 +24,6 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@PrimaryKeyJoinColumn
 @Table(name = "JOIND_SAMPLE_CHILD")
 public class JoindSampleChild extends JoindSample {
 

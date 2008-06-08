@@ -35,6 +35,7 @@ import org.seasar.framework.jpa.metadata.EntityDesc;
 
 
 /**
+ * OpenJPA用の{@link EntityDesc}実装です。
  * @author Hidenoshin Yoshida
  *
  */
@@ -65,6 +66,11 @@ public class OpenJPAEntityDesc implements EntityDesc {
     /** 識別カラムの{@link Types SQL型}が表す値 */
     protected final int discriminatorSqlType;
 
+    /**
+     * コンストラクタ
+     * @param classMetaData 対象クラスのClassMetaDataオブジェクト
+     * @param factory OpenJPAEntityManagerFactorySPIオブジェクト
+     */
     public OpenJPAEntityDesc(ClassMetaData classMetaData,
             OpenJPAEntityManagerFactorySPI factory) {
         this.classMetaData = classMetaData;
@@ -136,42 +142,42 @@ public class OpenJPAEntityDesc implements EntityDesc {
         }
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getAttributeDesc(java.lang.String)
      */
     public OpenJPAAttributeDesc getAttributeDesc(String attributeName) {
         return attributeDescMap.get(attributeName);
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getAttributeDescs()
      */
     public OpenJPAAttributeDesc[] getAttributeDescs() {
         return attributeDescs;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getAttributeNames()
      */
     public String[] getAttributeNames() {
         return attributeNames;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getEntityClass()
      */
     public Class<?> getEntityClass() {
         return classMetaData.getDescribedType();
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getEntityName()
      */
     public String getEntityName() {
         return classMetaData.getTypeAlias();
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getIdAttributeDesc()
      */
     public OpenJPAAttributeDesc getIdAttributeDesc() {
@@ -180,10 +186,18 @@ public class OpenJPAEntityDesc implements EntityDesc {
     }
 
     
+    /**
+     * テーブル一覧を返します。
+     * @return テーブル一覧
+     */
     public Table[] getTables() {
         return tables;
     }
     
+    /**
+     * ClassMetaDataオブジェクトを返します。
+     * @return ClassMetaDataオブジェクト
+     */
     public ClassMetaData getClassMetaData() {
         return classMetaData;
     }

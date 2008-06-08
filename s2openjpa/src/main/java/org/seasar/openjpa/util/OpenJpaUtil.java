@@ -26,10 +26,18 @@ import org.seasar.framework.exception.InvocationTargetRuntimeException;
 
 
 /**
+ * OpenJPA内のAPIを利用する為のユーティリティクラスです。
  * @author Hidenoshin Yoshida
  *
  */
 public class OpenJpaUtil {
+    
+    /**
+     * FieldMetaDataオブジェクトに定義されたカラムのデータをentityオブジェクトから取得します。
+     * @param fieldMetaData 対象カラムデータを保持するFieldMetaDetaオブジェクト
+     * @param entity データ取得元となるEntityオブジェクト
+     * @return entityから取得した対象カラムデータ
+     */
     public static Object getValue(FieldMetaData fieldMetaData, Object entity) {
         if (entity == null) {
             return null;

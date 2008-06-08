@@ -28,6 +28,7 @@ import org.seasar.framework.jpa.Dialect;
 import org.seasar.framework.jpa.DialectManager;
 
 /**
+ * OpenJPA用の{@link Dialect}実装です。
  * @author Hidenoshin Yoshida
  * 
  */
@@ -55,12 +56,18 @@ public class S2OpenJPADialect implements Dialect {
         dialectManager.removeDialect(OpenJPAEntityManager.class);
     }
 
+    /**
+     * @see org.seasar.framework.jpa.Dialect#getConnection(javax.persistence.EntityManager)
+     */
     public Connection getConnection(EntityManager em) {
         Object delegate = em.getDelegate();
         OpenJPAEntityManager ojpaEm = OpenJPAEntityManager.class.cast(delegate);
         return Connection.class.cast(ojpaEm.getConnection());
     }
 
+    /**
+     * @see org.seasar.framework.jpa.Dialect#detach(javax.persistence.EntityManager, java.lang.Object)
+     */
     public void detach(EntityManager em, Object managedEntity) {
         Object delegate = em.getDelegate();
         OpenJPAEntityManager ojpaEm = OpenJPAEntityManager.class.cast(delegate);

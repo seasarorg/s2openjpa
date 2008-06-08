@@ -167,13 +167,16 @@
 							http://aopalliance.sourceforge.net/doc/
 						</link>
 						<link>
-							http://s2container.seasar.org/ja/s2-framework/apidocs/
+							http://s2container.seasar.org/2.4/s2-framework/ja/apidocs/
 						</link>
 						<link>
-							http://s2container.seasar.org/ja/s2-extension/apidocs/
+							http://s2container.seasar.org/2.4/s2-extension/ja/apidocs/
 						</link>
 						<link>
-							http://s2container.seasar.org/ja/s2-tiger/apidocs/
+							http://s2container.seasar.org/2.4/s2-tiger/ja/apidocs/
+						</link>
+						<link>
+							http://openjpa.apache.org/builds/1.1.0/apache-openjpa-1.1.0/docs/javadoc/
 						</link>
 					</links>
 				</configuration>

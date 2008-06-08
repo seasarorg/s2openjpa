@@ -24,26 +24,27 @@ import org.seasar.extension.jta.SingletonTransactionManagerProxy;
 
 
 /**
+ * Seasar2用の{@link org.apache.openjpa.ee.ManagedRuntime}実装です。
  * @author Hidenoshin Yoshida
  *
  */
 public class S2ManagedRuntime extends AbstractManagedRuntime {
 
-    /* (non-Javadoc)
+    /**
      * @see org.apache.openjpa.ee.ManagedRuntime#getTransactionManager()
      */
     public TransactionManager getTransactionManager() throws Exception {
         return new SingletonTransactionManagerProxy();
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.apache.openjpa.ee.ManagedRuntime#getRollbackCause()
      */
     public Throwable getRollbackCause() throws Exception {
         return null;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.apache.openjpa.ee.ManagedRuntime#setRollbackOnly(java.lang.Throwable)
      */
     public void setRollbackOnly(Throwable cause) throws Exception {

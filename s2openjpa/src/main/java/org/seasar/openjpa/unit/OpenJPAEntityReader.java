@@ -41,7 +41,8 @@ import org.seasar.openjpa.util.OpenJpaUtil;
 
 
 /**
- * @author hidenoshin
+ * OpenJPA用の{@link EntityReader}実装です。
+ * @author Hidenoshin Yoshida
  *
  */
 public class OpenJPAEntityReader implements EntityReader {
@@ -51,11 +52,16 @@ public class OpenJPAEntityReader implements EntityReader {
     /** データセット */
     protected final DataSet dataSet = new DataSetImpl();
     
+    /**
+     * コンストラクタ
+     */
     protected OpenJPAEntityReader() {
     }
 
     /**
-     * @param entityDesc
+     * コンストラクタ
+     * @param entity 対象となるEntityオブジェクト
+     * @param entityDesc entityに対応するOpenJPAEntityDescオブジェクト
      */
     public OpenJPAEntityReader(Object entity, OpenJPAEntityDesc entityDesc) {
         this.entityDesc = entityDesc;
@@ -155,10 +161,11 @@ public class OpenJPAEntityReader implements EntityReader {
     }
 
     /**
-     * @param entity
-     * @param table
-     * @param row
-     * @param fMapping
+     * IDデータを取得して対象DataRowにセットします。
+     * @param entity 対象Entityオブジェクト
+     * @param table 対象DataTableオブジェクト
+     * @param row 対象DataRowオブジェクト
+     * @param fMapping 対象カラム情報を保持するFieldMappingオブジェクト
      */
     protected void setIdRow(final Object entity, DataTable table, DataRow row,
             FieldMapping fMapping) {
@@ -169,6 +176,12 @@ public class OpenJPAEntityReader implements EntityReader {
         }
     }
 
+    /**
+     * 引数のmetaオブジェクトに関連するカラムデータを対象entityから取得してDataRowにセットします。
+     * @param entity 対象Entityオブジェクト
+     * @param rowMap DataRow保持Mapオブジェクト
+     * @param meta 対象カラムデータを保持するFieldMetaDataオブジェクト
+     */
     protected void setRow(final Object entity, Map<String, DataRow> rowMap,
             FieldMetaData meta) {
         if (meta instanceof FieldMapping) {
@@ -181,10 +194,11 @@ public class OpenJPAEntityReader implements EntityReader {
     }
 
     /**
-     * @param entity
-     * @param rowMap
-     * @param meta
-     * @param c
+     * Columnオブジェクトで定義されたカラムのデータをentityから取得して対象DataRowにセットします。
+     * @param entity 対象Entityオブジェクト
+     * @param rowMap DataRow保持Mapオブジェクト
+     * @param meta 対象カラムデータを保持するFieldMetaDataオブジェクト
+     * @param c 対象カラムデータを保持するColumnオブジェクト
      */
     protected void setData(final Object entity, Map<String, DataRow> rowMap,
             FieldMetaData meta, Column c) {
@@ -201,10 +215,11 @@ public class OpenJPAEntityReader implements EntityReader {
     }
 
     /**
-     * @param c
-     * @param table
-     * @param value
-     * @return
+     * データをカラムの型定義に基づいて型変換を行います。
+     * @param c 対象カラムデータを保持するColumnオブジェクト
+     * @param table データセット対象DataTableオブジェクト
+     * @param value 型変換対象データ
+     * @return 型変換したデータ
      */
     protected Object convertValue(Column c, DataTable table, Object value) {
         if (value != null) {
@@ -219,12 +234,16 @@ public class OpenJPAEntityReader implements EntityReader {
         return value;
     }
     
+    /**
+     * OpenJPAEntityDescオブジェクトを返します。
+     * @return OpenJPAEntityDescオブジェクト
+     */
     protected OpenJPAEntityDesc getEntityDesc() {
         return entityDesc;
     }
 
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.extension.dataset.DataReader#read()
      */
     public DataSet read() {

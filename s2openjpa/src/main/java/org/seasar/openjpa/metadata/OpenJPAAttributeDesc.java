@@ -48,6 +48,7 @@ import org.seasar.framework.jpa.util.TemporalTypeUtil;
 import org.seasar.openjpa.util.OpenJpaUtil;
 
 /**
+ * OpenJPA用の{@link AttributeDesc}実装です。
  * @author Hidenoshin Yoshida
  * 
  */
@@ -61,6 +62,11 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
 
     private OpenJPAEntityDesc embeddedEntityDesc;
     
+    /**
+     * コンストラクタ
+     * @param fieldMetaData FieldMetaDataオブジェクト
+     * @param openJPAEntityManagerFactory OpenJPAEntityManagerFactorySPIオブジェクト
+     */
     public OpenJPAAttributeDesc(FieldMetaData fieldMetaData,
             OpenJPAEntityManagerFactorySPI openJPAEntityManagerFactory) {
         this.fieldMetaData = fieldMetaData;
@@ -76,12 +82,15 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         }
     }
     
+    /**
+     * FieldMetaDataオブジェクトを返します。
+     * @return FieldMetaDataオブジェクト
+     */
     public FieldMetaData getFieldMetaData() {
         return fieldMetaData;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getElementType()
      */
@@ -106,8 +115,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getName()
      */
@@ -115,8 +123,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         return fieldMetaData.getName();
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getSqlType()
      */
@@ -138,8 +145,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         return Types.OTHER;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
      * 
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getTemporalType()
      */
@@ -151,27 +157,21 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getType()
      */
     public Class<?> getType() {
         return fieldMetaData.getDeclaredType();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#getValue(java.lang.Object)
      */
     public Object getValue(Object entity) {
         return OpenJpaUtil.getValue(fieldMetaData, entity);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#isAssociation()
      */
     public boolean isAssociation() {
@@ -183,9 +183,7 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         return false;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#isCollection()
      */
     public boolean isCollection() {
@@ -193,36 +191,28 @@ public class OpenJPAAttributeDesc implements AttributeDesc {
         return Collection.class.isAssignableFrom(clazz);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#isComponent()
      */
     public boolean isComponent() {
         return fieldMetaData.getEmbeddedMetaData() != null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#isId()
      */
     public boolean isId() {
         return fieldMetaData.isPrimaryKey();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#isVersion()
      */
     public boolean isVersion() {
         return fieldMetaData.isVersion();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.AttributeDesc#setValue(java.lang.Object,
      *      java.lang.Object)
      */

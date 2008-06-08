@@ -26,12 +26,13 @@ import org.seasar.openjpa.metadata.OpenJPAEntityDesc;
 
 
 /**
- * @author hidenoshin
+ * OpenJPA用の{@link EntityReaderProvider}実装です。
+ * @author Hidenoshin Yoshida
  *
  */
 public class OpenJPAEntityReaderProvider implements EntityReaderProvider {
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.unit.EntityReaderProvider#createEntityReader(java.lang.Object)
      */
     public OpenJPAEntityReader createEntityReader(Object entity) {
@@ -45,7 +46,7 @@ public class OpenJPAEntityReaderProvider implements EntityReaderProvider {
         return new OpenJPAEntityReader(entity, entityDesc);
     }
 
-    /* (non-Javadoc)
+    /**
      * @see org.seasar.framework.jpa.unit.EntityReaderProvider#createEntityReader(java.util.Collection)
      */
     public OpenJPAEntityCollectionReader createEntityReader(Collection<?> entities) {

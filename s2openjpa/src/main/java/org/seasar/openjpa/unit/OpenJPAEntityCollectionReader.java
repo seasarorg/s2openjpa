@@ -22,7 +22,8 @@ import org.seasar.openjpa.metadata.OpenJPAEntityDesc;
 
 
 /**
- * @author hidenoshin
+ * OpenJPA用の{@link org.seasar.framework.jpa.unit.EntityReader}実装です（Collection用）。
+ * @author Hidenoshin Yoshida
  *
  */
 public class OpenJPAEntityCollectionReader extends OpenJPAEntityReader {
@@ -56,7 +57,7 @@ public class OpenJPAEntityCollectionReader extends OpenJPAEntityReader {
     }
 
     /**
-     * @see org.seasar.toplink.jpa.unit.TopLinkEntityReader#getEntityDesc()
+     * @see org.seasar.openjpa.unit.OpenJPAEntityReader#getEntityDesc()
      */
     @Override
     protected OpenJPAEntityDesc getEntityDesc() {

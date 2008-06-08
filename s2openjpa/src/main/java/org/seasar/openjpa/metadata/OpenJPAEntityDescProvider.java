@@ -24,14 +24,13 @@ import org.seasar.framework.jpa.metadata.EntityDesc;
 import org.seasar.framework.jpa.metadata.EntityDescProvider;
 
 /**
+ * OpenJPA用の{@link EntityDescProvider}実装です。
  * @author Hidenoshin Yoshida
  * 
  */
 public class OpenJPAEntityDescProvider implements EntityDescProvider {
 
-    /*
-     * (non-Javadoc)
-     * 
+    /**
      * @see org.seasar.framework.jpa.metadata.EntityDescProvider#createEntityDesc(javax.persistence.EntityManagerFactory,
      *      java.lang.Class)
      */

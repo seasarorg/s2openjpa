@@ -7,7 +7,7 @@
 	<artifactId>s2openjpa</artifactId>
 	<packaging>jar</packaging>
 	<name>s2openjpa</name>
-	<version>1.0.0-rc1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<description>s2openjpa</description>
 	<url>http://s2openjpa.sandbox.seasar.org/</url>
 	<issueManagement>
@@ -180,6 +180,14 @@
 						</link>
 					</links>
 				</configuration>
+				<executions>
+					<execution>
+						<phase>site</phase>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

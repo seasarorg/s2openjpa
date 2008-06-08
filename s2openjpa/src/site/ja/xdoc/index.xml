@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+	<properties>
+		<title>Top</title>
+	</properties>
+	<body>
+		<section name="Welcome">
+			<p>
+			S2OpenJPAは、OpenJPAとSeasar2を連動させるためのフレームワークです。
+			S2OpenJPAによりアプリケーションはJava Persistence APIを簡単に利用することができます。
+			</p>
+			<dl>
+				<dt>概要</dt>
+				<dd><p>S2OpenJPAは以下の特徴を持っています。</p>
+				<ul>
+					<li>Seasar2で管理されているJava Transaction API(JTA)やConnectionPoolと<a href="http://openjpa.apache.org/">OpenJPA</a>を連動出来ます。</li>
+					<li>アプリケーションサーバ上で実行しなくてもEJB3のJava Persistence API(JPA)を利用出来ます。</li>
+					<li><a href="http://s2container.seasar.org/2.4/ja/DIContainer.html#SMARTdeploy">SMART deploy</a>を利用することで永続ユニットごとに永続クラスとマッピングファイルを自動的に検出し登録出来ます。</li>
+					<li>効率的なテストをサポートします。</li>
+				</ul>
+				</dd>
+			</dl>
+			<dl>
+				<dt>Kuina-Daoとの連携</dt>
+				<dd>S2OpenJPAは、Daoフレームワークである<a href="http://kuina.seasar.org/ja/">Kuina-Dao</a>上で動作可能です。
+				Kuina-Daoを利用すると定型的なコードや動的な問い合わせのためのコードをほとんど書く必要がなくなります。 S2OpenJPAはKuina-Daoと合わせて利用することをお勧めします。
+				Kuina-Daoを利用した開発方法については<a href="http://kuina.seasar.org/ja/firststep/index.html">ファーストステップガイド</a>を参照してください。
+				</dd>
+			</dl>
+		</section>
+		<section name="News">
+			<dl>
+				<dt>2008/06/XX</dt>
+				<dd>
+					<div>
+						S2OpenJPA 1.0.0 をリリースしました。（<a href="../downloads/2008/06/XX/S2OpenJPA-1.0.0.zip">ダウンロード</a>）
+					</div>
+				</dd>
+			</dl>
+		</section>
+	</body>
+</document>

@@ -31,7 +31,6 @@ import org.apache.openjpa.jdbc.schema.Table;
 import org.apache.openjpa.meta.ClassMetaData;
 import org.apache.openjpa.meta.FieldMetaData;
 import org.apache.openjpa.persistence.OpenJPAEntityManagerFactorySPI;
-import org.seasar.framework.jpa.metadata.AttributeDesc;
 import org.seasar.framework.jpa.metadata.EntityDesc;
 
 
@@ -175,7 +174,7 @@ public class OpenJPAEntityDesc implements EntityDesc {
     /* (non-Javadoc)
      * @see org.seasar.framework.jpa.metadata.EntityDesc#getIdAttributeDesc()
      */
-    public AttributeDesc getIdAttributeDesc() {
+    public OpenJPAAttributeDesc getIdAttributeDesc() {
         
         return idAttributeDesc;
     }

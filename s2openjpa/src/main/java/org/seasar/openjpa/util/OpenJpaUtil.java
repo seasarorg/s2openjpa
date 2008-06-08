@@ -49,7 +49,7 @@ public class OpenJpaUtil {
         } else if (member instanceof Method) {
             Method method = Method.class.cast(member);
             try {
-                return method.invoke(entity, (Object) null);
+                return method.invoke(entity, new Object[]{});
             } catch (IllegalAccessException e) {
                 throw new IllegalAccessRuntimeException(method.getClass(), e);
             } catch (InvocationTargetException e) {

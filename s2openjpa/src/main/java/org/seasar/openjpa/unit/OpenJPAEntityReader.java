@@ -19,6 +19,7 @@ import java.util.Map;
 
 import org.apache.openjpa.jdbc.meta.ClassMapping;
 import org.apache.openjpa.jdbc.meta.FieldMapping;
+import org.apache.openjpa.jdbc.meta.strats.RelationFieldStrategy;
 import org.apache.openjpa.jdbc.schema.Column;
 import org.apache.openjpa.jdbc.schema.Table;
 import org.apache.openjpa.meta.FieldMetaData;
@@ -32,6 +33,7 @@ import org.seasar.extension.dataset.states.RowStates;
 import org.seasar.extension.dataset.types.BigDecimalType;
 import org.seasar.extension.dataset.types.ColumnTypes;
 import org.seasar.framework.jpa.unit.EntityReader;
+import org.seasar.framework.jpa.unit.EntityReaderFactory;
 import org.seasar.framework.util.tiger.CollectionsUtil;
 import org.seasar.openjpa.metadata.OpenJPAAttributeDesc;
 import org.seasar.openjpa.metadata.OpenJPAEntityDesc;
@@ -101,10 +103,29 @@ public class OpenJPAEntityReader implements EntityReader {
         for (OpenJPAAttributeDesc attribute : getEntityDesc().getAttributeDescs()) {
             if (attribute.isComponent()) {
                 for (OpenJPAAttributeDesc childDesc : attribute.getChildAttributeDescs()) {
-                    setRow(attribute.getValue(entity), rowMap, childDesc);
+                    setRow(attribute.getValue(entity), rowMap, childDesc.getFieldMetaData());
+                }
+            } else if (attribute.isAssociation()) {
+                FieldMapping fm = (FieldMapping) attribute.getFieldMetaData();
+                if (fm.getStrategy() instanceof RelationFieldStrategy) {
+                    RelationFieldStrategy rfs = (RelationFieldStrategy) fm.getStrategy();
+                    Object asso = attribute.getValue(entity);
+                    OpenJPAEntityReader reader = (OpenJPAEntityReader) EntityReaderFactory.getEntityReader(asso);
+                    OpenJPAAttributeDesc idDesc = reader.getEntityDesc().getIdAttributeDesc();
+                    if (idDesc.isComponent()) {
+                        for (OpenJPAAttributeDesc idChild : idDesc.getChildAttributeDescs()) {
+                            for (Column c : rfs.getColumns()) {
+                                setData(idDesc.getValue(asso), rowMap, idChild.getFieldMetaData(), c);
+                            }
+                        }
+                    } else {
+                        for (Column c : rfs.getColumns()) {
+                            setData(asso, rowMap, idDesc.getFieldMetaData(), c);                            
+                        }
+                    }
                 }
             } else {
-                setRow(entity, rowMap, attribute);
+                setRow(entity, rowMap, attribute.getFieldMetaData());
             }
         }
         DataTable table = dataSet.getTable(getEntityDesc().getPrimaryTableName());
@@ -149,24 +170,34 @@ public class OpenJPAEntityReader implements EntityReader {
     }
 
     protected void setRow(final Object entity, Map<String, DataRow> rowMap,
-            OpenJPAAttributeDesc attribute) {
-        FieldMetaData meta = attribute.getFieldMetaData();
+            FieldMetaData meta) {
         if (meta instanceof FieldMapping) {
             FieldMapping mapping = FieldMapping.class.cast(meta);
             for (Column c : mapping.getColumns()) {
-                DataTable table = dataSet.getTable(c.getTableName());
-                DataRow row = rowMap.get(table.getTableName());
-                if (row == null) {
-                    row = table.addRow();
-                    rowMap.put(table.getTableName(), row);
-                }
-                Object value = attribute.getValue(entity);
-                value = convertValue(c, table, value);
-
-                row.setValue(c.getName(), value);
+                setData(entity, rowMap, meta, c);
                 
             }
         }
+    }
+
+    /**
+     * @param entity
+     * @param rowMap
+     * @param meta
+     * @param c
+     */
+    protected void setData(final Object entity, Map<String, DataRow> rowMap,
+            FieldMetaData meta, Column c) {
+        DataTable table = dataSet.getTable(c.getTableName());
+        DataRow row = rowMap.get(table.getTableName());
+        if (row == null) {
+            row = table.addRow();
+            rowMap.put(table.getTableName(), row);
+        }
+        Object value = OpenJpaUtil.getValue(meta, entity);
+        value = convertValue(c, table, value);
+
+        row.setValue(c.getName(), value);
     }
 
     /**
@@ -177,9 +208,6 @@ public class OpenJPAEntityReader implements EntityReader {
      */
     protected Object convertValue(Column c, DataTable table, Object value) {
         if (value != null) {
-//                    if (attribute.isComponent()) {
-//                        value = mapping.getDescriptor().getObjectBuilder().getBaseValueForField(field, entity);
-//                    }
             if (value instanceof Enum) {
                 DataColumn column = table.getColumn(c.getName());
                 ColumnType type = column.getColumnType();

@@ -25,7 +25,7 @@ import javax.persistence.TemporalType;
 
 
 /**
- * @author hidenoshin
+ * @author Hidenoshin Yoshida
  *
  */
 @Embeddable

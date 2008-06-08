@@ -27,7 +27,7 @@ import org.seasar.openjpa.entity.Normal;
 import static org.seasar.framework.unit.S2Assert.*;
 
 /**
- * @author hidenoshin
+ * @author Hidenoshin Yoshida
  *
  */
 @RunWith(Seasar2.class)

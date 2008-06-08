@@ -22,7 +22,7 @@ import javax.persistence.Entity;
 
 
 /**
- * @author hidenoshin
+ * @author Hidenoshin Yoshida
  *
  */
 @Entity

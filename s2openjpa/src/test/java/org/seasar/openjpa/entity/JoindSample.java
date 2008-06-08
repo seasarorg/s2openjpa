@@ -25,7 +25,7 @@ import javax.persistence.InheritanceType;
 
 
 /**
- * @author hidenoshin
+ * @author Hidenoshin Yoshida
  *
  */
 @Entity

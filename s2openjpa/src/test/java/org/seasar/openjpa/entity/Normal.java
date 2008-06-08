@@ -30,7 +30,7 @@ import javax.persistence.Version;
 
 
 /**
- * @author hidenoshin
+ * @author Hidenoshin Yoshida
  *
  */
 @Entity

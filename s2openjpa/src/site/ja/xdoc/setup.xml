@@ -23,7 +23,7 @@
 		</ul>
 		</section>
 		<section name="データベース">
-		<p>簡単に機能を試すことが出来るように、RDBMSである<a href="http://www.h2database.com/html/frame_ja.html">H2 Database Engine</a>(h2-1.0.67.jar)がS2OpenJPAに含まれています。</p>
+		<p>簡単に機能を試すことが出来るように、RDBMSである<a href="http://www.h2database.com/html/frame_ja.html">H2 Database Engine</a>(h2-1.0.XX.jar)がS2OpenJPAに含まれています。</p>
 		</section>
 	</body>
 </document>

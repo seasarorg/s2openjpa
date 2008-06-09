@@ -1,0 +1,42 @@
+<project name="s2openjpa" default="dist" basedir=".">
+	<property name="ver" value="1.0.0"/>
+
+	<target name="dist" depends="fix-site">
+		<zip zipfile="target/S2OpenJPA-${ver}.zip">
+			<zipfileset prefix="s2openjpa" dir=".">
+				<exclude name="**/build/**"/>
+				<exclude name="**/target/**"/>
+			</zipfileset>
+			<zipfileset prefix="s2openjpa/lib" dir="target">
+				<include name="s2openjpa-${ver}.jar"/>
+			</zipfileset>
+			<zipfileset prefix="s2openjpa/libsrc" dir="target">
+				<include name="s2openjpa-${ver}-sources.jar"/>
+			</zipfileset>
+			<zipfileset prefix="s2openjpa/resources" dir="src/test/resources">
+				<include name="jpa.dicon"/>
+				<include name="jdbc.dicon"/>
+			</zipfileset>
+			<zipfileset prefix="s2openjpa/resources/META-INF" dir="src/test/resources/META-INF">
+				<include name="persistence.xml"/>
+			</zipfileset>
+			<zipfileset prefix="s2openjpa/doc" dir="target/site">
+			</zipfileset>
+		</zip>
+	</target>
+	
+	<target name="fix-site">
+		<mkdir dir="target/site/en"/>
+		<move todir="target/site/en">
+			<fileset dir="target/site">
+				<exclude name="apidocs/**"/>
+				<exclude name="en/**"/>
+				<exclude name="ja/**"/>
+				<exclude name="index.html.en"/>
+				<exclude name="index.html.ja"/>
+			</fileset>
+		</move>
+		<delete file="target/site/ja/index.html.en"/>
+		<delete file="target/site/ja/index.html.ja"/>
+	</target>
+</project>

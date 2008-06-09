@@ -35,11 +35,16 @@
       <item name="ホーム" href="index.html"/>
       <item name="ライセンス" href="license.html"/>
       <item name="ダウンロード" href="downloads.html"/>
+      <!-- 
       <item name="Changelog" href="changelog.html"/>
+       -->
     </menu>
     <menu name="ドキュメント">
       <item name="セットアップ" href="setup.html"/>
       <item name="基本的な使い方" href="basic.html"/>
+      <item name="クラスの自動登録" href="autoregist.html"/>
+      <item name="複数Unitの使用" href="multiunit.html"/>
+      <item name="テストのサポート" href="testsupport.html"/>
       <item name="Javadoc" href="../apidocs/index.html"/>
     </menu>
     ${reports}

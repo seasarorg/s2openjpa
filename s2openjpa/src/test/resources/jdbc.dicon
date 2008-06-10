@@ -21,6 +21,14 @@
 	-->
 
 	<!-- for H2 -->
+	<!-- 
+	S2OpenJPAを利用する場合、通常の「jdbc.dataSource」に加えて
+	persistence.xmlのnonJtaDataSource要素用に、別のDataSourceを定義する必要があります。
+	利用するJDBCドライバが提供するDataSource実装クラスのcomponentを、
+	persistence.xmlのnonJtaDataSource要素に指定した名前で定義してください。
+	H2 Databaseを利用する場合、Seasar2が利用するxaDataSourceとnonJtaDataSourceを
+	org.h2.jdbcx.JdbcDataSourceクラスのcomponentで共用することが出来ます。
+	 -->
 	<component name="nonJtaDataSource"
 		class="org.h2.jdbcx.JdbcDataSource">
 		<property name="URL">
@@ -45,6 +53,15 @@
 		<property name="user">"sa"</property>
 		<property name="password">""</property>
 	</component>
+	
+	<component name="nonJtaDataSource"
+		class="org.hsqldb.jdbc.jdbcDataSource">
+		<property name="database">
+			"jdbc:hsqldb:hsql://localhost:9001"
+		</property>
+		<property name="user">"sa"</property>
+		<property name="password">""</property>
+	</component>	
 	 -->
 
 	<!-- for Derby -->
@@ -57,6 +74,13 @@
 		<property name="URL">
 			"jdbc:derby:demo"
 		</property>
+		<property name="user">""</property>
+		<property name="password">""</property>
+	</component>
+
+	<component name="nonJtaDataSource"
+		class="org.apache.derby.jdbc.EmbeddedDataSource">
+		<property name="databaseName">"demo"</property>
 		<property name="user">""</property>
 		<property name="password">""</property>
 	</component>

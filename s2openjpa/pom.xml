@@ -392,5 +392,9 @@
 			</name>
 			<url>dav:https://www.seasar.org/maven/maven2-snapshot</url>
 		</snapshotRepository>
+		<site>
+			<id>www.seasar.org</id>
+			<url>dav:https://www.seasar.org/site/sandbox/s2openjpa</url>
+		</site>
 	</distributionManagement>
 </project>

@@ -1,8 +1,11 @@
 <project name="s2openjpa" default="dist" basedir=".">
-	<property name="ver" value="1.0.0"/>
+	<tstamp>
+		<format property="releaseDate" pattern="yyyy-MM-dd" locale="ja,JP"/>
+	</tstamp>
 
 	<target name="dist" depends="fix-site">
-		<zip zipfile="target/S2OpenJPA-${ver}.zip">
+		<mkdir dir="target/site/downloads/${releaseDate}"/>
+		<zip zipfile="target/site/downloads/${releaseDate}/S2OpenJPA-${ver}.zip">
 			<zipfileset prefix="s2openjpa" dir=".">
 				<exclude name="**/build/**"/>
 				<exclude name="**/target/**"/>

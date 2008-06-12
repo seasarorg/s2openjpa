@@ -12,9 +12,7 @@
 	<url>http://s2openjpa.sandbox.seasar.org/</url>
 	<issueManagement>
 		<system>JIRA</system>
-		<url>
-			<![CDATA[https://www.seasar.org/issues/browse/s2openjpa]]>
-		</url>
+		<url>https://www.seasar.org/issues/browse/OPENJPA</url>
 	</issueManagement>
 	<inceptionYear>2007</inceptionYear>
 	<mailingLists>

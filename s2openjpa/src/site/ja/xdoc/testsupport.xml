@@ -39,7 +39,7 @@ public class FileTest {
         em.persist(document);
 
         Query query = em.createQuery("SELECT f FROM File f ORDER BY f.name");
-        <b>assertEntityEquals</b>(context.getExpected(), query.getResultList());
+        <strong>assertEntityEquals</strong>(context.getExpected(), query.getResultList());
     }
 }</pre> 
 <p>このコードにはFolderクラスとDocumentクラスが登場しますが、これらはともにFileクラスを継承したエンティティです。さらにFileクラスもエンティティであり、継承戦略にはJoined Subclassが使用されています。したがって、このテストで実行されるJPQLは3つのテーブルにまたがるデータを返します。org.seasar.framework.unit.S2AssertクラスのassertEntityEqualsを使用することで、3つのテーブルにまたがるデータを含んだ期待値（context.getExpected()で取得）とJPQLの戻り値（query.getResultList()で取得）を比較検証することができます。</p>
